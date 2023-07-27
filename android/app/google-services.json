@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "573264325140",
+    "project_id": "scribbleverse-b95d4",
+    "storage_bucket": "scribbleverse-b95d4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573264325140:android:36357fbef591249cde9501",
+        "android_client_info": {
+          "package_name": "com.example.scribbleverse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "573264325140-ps6tbchat0si5poefnapm75o0nj4rsq0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scribbleverse",
+            "certificate_hash": "e3541a6bd4e6ad47a3d60007d924045b808998dd"
+          }
+        },
+        {
+          "client_id": "573264325140-duo3slc8ugsk3rl1t9ci4gk3cr9ntbjl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbhwcNlFKd8z2tdVgb-hRqw8x06qMtp1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "573264325140-duo3slc8ugsk3rl1t9ci4gk3cr9ntbjl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
