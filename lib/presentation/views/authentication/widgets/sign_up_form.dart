@@ -17,10 +17,7 @@ class FormArea extends StatelessWidget {
 
   final RegExp regExp;
   final bool _isPressed;
-  // final GlobalKey<FormState> _formKey;
-
   final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -28,11 +25,10 @@ class FormArea extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(15, 35, 15, 0),
+            padding: const EdgeInsets.fromLTRB(15, 35, 15, 0),
             child: Text(
               'Sign up',
               style: mainFont,
-              // TextStyle(fontSize: 28, color: Colors.white),
             ),
           ),
           Padding(
@@ -40,12 +36,13 @@ class FormArea extends StatelessWidget {
             child: Consumer<SignUpWithEmailProvider>(
               builder: (context, value, child) => Container(
                 width: double.infinity,
-                height: 55,
+                // height: 55,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: TextFIeldWidget(
+                      type: false,
                       hintText: 'Email',
                       controller: value.emailController,
                       validate: (p0) {
@@ -65,12 +62,13 @@ class FormArea extends StatelessWidget {
             child: Consumer<SignUpWithEmailProvider>(
               builder: (context, value, child) => Container(
                 width: double.infinity,
-                height: 55,
+                // height: 55,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: TextFIeldWidget(
+                    type: true,
                     hintText: 'Password',
                     controller: value.passwordController,
                     validate: (p0) {
@@ -91,12 +89,13 @@ class FormArea extends StatelessWidget {
             child: Consumer<SignUpWithEmailProvider>(
               builder: (context, value, child) => Container(
                 width: double.infinity,
-                height: 55,
+                // height: 55,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: TextFIeldWidget(
+                    type: true,
                     hintText: 'Confirm password',
                     controller: value.confirmPasswordController,
                     validate: (p0) {
@@ -135,9 +134,14 @@ class FormArea extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                          child: Text(
-                        'Already have an account?',
-                        style: forgotPassword,
+                          child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/login');
+                        },
+                        child: Text(
+                          'Already have an account?',
+                          style: forgotPassword,
+                        ),
                       )),
                       Consumer<SignUpWithEmailProvider>(
                         builder: (context, value, child) => ElevatedButton(
@@ -147,21 +151,14 @@ class FormArea extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10))),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                showDialog(
-                                    context: context,
-                                    builder: ((context) {
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    }));
                                 await FirebaseAuth.instance
                                     .createUserWithEmailAndPassword(
                                         email: value.emailController.text,
-                                        password: value.passwordController.text)
-                                    .then((value) {
-                                  Navigator.pushNamed(context, '/home');
-                                });
-                                onError:
-                                ((error, stackTrace) {});
+                                        password:
+                                            value.passwordController.text);
+
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushNamed(context, '/add_profile');
                               }
                             },
                             child: Text(
@@ -176,7 +173,7 @@ class FormArea extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 30),
+            padding: const EdgeInsets.only(top: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

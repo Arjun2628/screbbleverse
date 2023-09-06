@@ -4,9 +4,10 @@ class SignUpWithEmailProvider extends ChangeNotifier {
   emailValidate(String? Function(String?)? value) {
     if (value == '') {
       return 'hghgjh';
-    } else
+    } else {
       (value) {
         return 'bfchghg';
       };
+    }
   }
 }

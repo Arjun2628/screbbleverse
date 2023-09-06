@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scribbleverse/domain/provider/authentication/login.dart';
 
 import '../../../../config/theams/colors.dart';
 import '../../../../config/theams/fonts.dart';
-import '../../../../domain/provider/authentication/sign_up_with_email.dart';
 import '../../../../domain/provider/authentication/sign_up_with_google.dart';
 import '../../../widgets/public_widgets/text_form_field.dart';
 
@@ -18,8 +18,6 @@ class LoginFormArea extends StatelessWidget {
 
   final RegExp regExp;
   final bool _isPressed;
-  // final GlobalKey<FormState> _formKey;
-
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,7 +27,7 @@ class LoginFormArea extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.fromLTRB(15, 35, 15, 0),
+            padding: const EdgeInsets.fromLTRB(15, 35, 15, 0),
             child: Text(
               'Login',
               style: mainFont,
@@ -38,15 +36,16 @@ class LoginFormArea extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 40, 15, 0),
-            child: Consumer<SignUpWithEmailProvider>(
+            child: Consumer<LoginProvider>(
               builder: (context, value, child) => Container(
                 width: double.infinity,
-                height: 55,
+                // height: 55,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: TextFIeldWidget(
+                      type: false,
                       hintText: 'Email',
                       controller: value.emailController,
                       validate: (p0) {
@@ -62,16 +61,17 @@ class LoginFormArea extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-            child: Consumer<SignUpWithEmailProvider>(
+            padding: const EdgeInsets.fromLTRB(15, 23, 15, 0),
+            child: Consumer<LoginProvider>(
               builder: (context, value, child) => Container(
                 width: double.infinity,
-                height: 55,
+                // height: 55,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: TextFIeldWidget(
+                    type: true,
                     hintText: 'Password',
                     controller: value.passwordController,
                     validate: (p0) {
@@ -110,25 +110,28 @@ class LoginFormArea extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                          child: RichText(
-                        text: TextSpan(
-                          text: 'Forgot Password?',
-                          style: forgotPassword,
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: 'Sign up',
-                                style: buttonText,
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {}),
-                          ],
-                        ),
-                      )
-                          //      Text(
-                          //   'Forgot Password?',
-                          //   style: forgotPassword,
-                          // )
+                          child: Consumer<LoginProvider>(
+                        builder: (context, value, child) => RichText(
+                          text: TextSpan(
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                value.resetpassword(context);
+                              },
+                            text: 'Forgot Password?',
+                            style: forgotPassword,
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: 'Sign up',
+                                  style: buttonText,
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.pushNamed(context, '/signUp');
+                                    }),
+                            ],
                           ),
-                      Consumer<SignUpWithEmailProvider>(
+                        ),
+                      )),
+                      Consumer<LoginProvider>(
                         builder: (context, value, child) => ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: signElivated,
@@ -143,14 +146,15 @@ class LoginFormArea extends StatelessWidget {
                                           child: CircularProgressIndicator());
                                     }));
                                 await FirebaseAuth.instance
-                                    .createUserWithEmailAndPassword(
+                                    .signInWithEmailAndPassword(
                                         email: value.emailController.text,
                                         password: value.passwordController.text)
+                                    // .createUserWithEmailAndPassword(
+                                    //     email: value.emailController.text,
+                                    //     password: value.passwordController.text)
                                     .then((value) {
-                                  Navigator.pushNamed(context, '/home');
+                                  Navigator.pushNamed(context, '/homes');
                                 });
-                                onError:
-                                ((error, stackTrace) {});
                               }
                             },
                             child: Text(
@@ -165,7 +169,7 @@ class LoginFormArea extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 30),
+            padding: const EdgeInsets.only(top: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -177,7 +181,7 @@ class LoginFormArea extends StatelessWidget {
                               listen: false)
                           .googleSignUp();
                       // ignore: use_build_context_synchronously
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamed(context, '/add_profile');
                     },
                     child: const CircleAvatar(
                       radius: 25,
