@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:http/http.dart';
 import 'package:scribbleverse/data/datasources/remote/dictionart_api.dart';
 
 import '../../domain/models/word_response.dart';
@@ -69,5 +70,10 @@ class WordRepository {
     } else {
       throw Exception('Failed to load word definitions');
     }
+  }
+
+  Future<Response> getEpub() async {
+    final response = await HttpService.getBooks();
+    return response;
   }
 }

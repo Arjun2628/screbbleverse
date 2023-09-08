@@ -29,11 +29,12 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animated_size_and_fade: ^3.0.1
+  archive: ^3.3.8
   cloud_firestore: ^4.8.4
   country_code_picker: ^3.0.0
   cupertino_icons: ^1.0.2
   dictionaryx: null
-  epub: ^2.1.0
+  epub_view: ^3.2.0
   file_picker: ^5.5.0
   firebase_auth: ^4.7.1
   firebase_core: ^2.15.0
@@ -45,6 +46,7 @@ dependencies:
   flutter_font_picker: null
   google_fonts: ^5.1.0
   google_sign_in: ^6.1.4
+  hive: ^2.2.3
   http: ^1.1.0
   image_picker: ^1.0.1
   intl: ^0.18.1
@@ -53,6 +55,7 @@ dependencies:
   json_serializable: ^6.7.1
   lottie: ^2.6.0
   page_flip: ^0.1.0
+  path_provider: ^2.1.1
   provider: ^6.0.5
   quick_dictionary: null
   uuid: ^3.0.7

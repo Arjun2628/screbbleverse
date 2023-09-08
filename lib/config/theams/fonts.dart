@@ -5,6 +5,8 @@ dynamic mainFont = GoogleFonts.literata(color: Colors.white, fontSize: 28);
 dynamic buttonText = GoogleFonts.literata(
   color: Colors.white,
 );
+dynamic buttonTextHeading =
+    GoogleFonts.literata(color: Colors.white, fontSize: 24);
 dynamic buttontextProfile =
     GoogleFonts.literata(color: Colors.white, fontSize: 18);
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:scribbleverse/config/router/routes.dart';
 import 'package:scribbleverse/domain/provider/authentication/login.dart';
 import 'package:scribbleverse/domain/provider/authentication/sign_up_with_google.dart';
-import 'package:scribbleverse/domain/provider/books/add_book_provider.dart';
+import 'package:scribbleverse/domain/provider/books/screens/add_book_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/comments_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/writting_provider.dart';

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
+import 'package:scribbleverse/presentation/views/books/screens/add_books.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -68,7 +69,16 @@ class BottomBar extends StatelessWidget {
           onTap: (index) async {
             // if (value.currentIndex != 2) {
             // await value.getUserData();
-            value.pageSelection(index);
+            if (index == 1) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddBooks(),
+                  ));
+            } else {
+              value.pageSelection(index);
+            }
+            // value.pageSelection(index);
             // }
             //  else {
             //   // Navigator.push(
