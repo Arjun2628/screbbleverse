@@ -712,13 +712,14 @@ class AddPoemProvider extends ChangeNotifier {
       'template_index': templateIndex,
       'background_image': imageUri,
       'caption': captionController.text,
-      'date_and_time': poemAddingTime,
+      'time': poemAddingTime,
       'user_profile_image': user!.profileImage,
       'user_name': user.userName,
       'user_about': user.about,
       'user_id': auth.currentUser!.uid,
       'poem_id': uuid,
-      'number_of_likes': 0
+      'number_of_likes': 0,
+      'type': 'poem'
     };
     Map<String, dynamic> poemsData = {
       'number_of_poems': 0,

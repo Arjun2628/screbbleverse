@@ -261,6 +261,8 @@ class AllShortStories extends StatelessWidget {
                                               child: Text(
                                                 data['discription'],
                                                 style: normalBlack,
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
                                               )),
                                           Align(
                                               alignment: Alignment.bottomLeft,

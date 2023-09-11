@@ -1,78 +1,93 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:scribbleverse/domain/provider/search/user_search_provider.dart';
 
-// class SearchWidget extends SearchDelegate {
-//   @override
-//   String get searchFieldLabel => "Search products,category";
+class SearchUsers extends StatelessWidget {
+  const SearchUsers({super.key});
 
-//   @override
-//   List<Widget>? buildActions(BuildContext context) {
-//     return [
-//       IconButton(
-//         icon: const Icon(Icons.clear),
-//         onPressed: () {
-//           query = '';
-//         },
-//       ),
-//     ];
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('users').snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CircularProgressIndicator(); // Show a loading indicator.
+              }
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
 
-//   @override
-//   Widget? buildLeading(BuildContext context) {
-//     return IconButton(
-//       icon: const Icon(Icons.arrow_back),
-//       onPressed: () {
-//         close(context, null);
-//       },
-//     );
-//   }
+              // Process the data from the Firestore collection.
+              final data = snapshot.data!.docs;
 
-//   @override
-//   Widget buildResults(BuildContext context) {
-//     return ValueListenableBuilder(
-//       valueListenable: carditems,
-//       builder:
-//           ((BuildContext context, List<UserModel> studentList, Widget? child) {
-//         List<UserModel> searchItems = [];
+              return YourSearchWidget(data); // Replace with your search widget.
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
 
-//         for (var element in studentList) {
-//           if (element.userName!.toLowerCase().contains(query.toLowerCase().trim()) 
-//               ) {
-//             searchItems.add(element);
-//           }
-//         }
-//         return searchItems.isNotEmpty
-//             ? ListView.separated(
-//                 itemBuilder: itemBuilder,
-//                 separatorBuilder: separatorBuilder,
-//                 itemCount: itemCount,
-//               )
-//             : const Center(
-//                 child: Text('No data'),
-//               );
-//       }),
-//     );
-//   }
+class YourSearchWidget extends StatefulWidget {
+  final List<QueryDocumentSnapshot> data;
 
-//   @override
-//   Widget buildSuggestions(BuildContext context) {
-//     return ValueListenableBuilder(
-//       valueListenable: carditems,
-//       builder:
-//           ((BuildContext context, List<UserModel> studentList, Widget? child) {
-//         List<UserModel> searchItems = [];
+  YourSearchWidget(this.data);
 
-//         for (var element in studentList) {
-//           if (element.userName!.toLowerCase().contains(query.toLowerCase().trim())) {
-//             searchItems.add(element);
-//           }
-//         }
-//         return searchItems.isNotEmpty
-//             ? 
-//             : const Center(
-//                 child: Text('No data'),
-//               );
+  @override
+  _YourSearchWidgetState createState() => _YourSearchWidgetState();
+}
 
-//         // ListModel();
-//       }),
-//     );
-//   }
-// }
+class _YourSearchWidgetState extends State<YourSearchWidget> {
+  String query = ''; // User input
+
+  List<QueryDocumentSnapshot> get filteredData {
+    // Filter the data based on the user input (query).
+    return widget.data.where((doc) {
+      final title =
+          doc['userName'] as String; // Adjust this to your data structure.
+      return title.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          onChanged: (value) {
+            setState(() {
+              query = value; // Update the query as the user types.
+            });
+          },
+          decoration: InputDecoration(
+            hintText: 'Search...',
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: filteredData.length,
+            itemBuilder: (context, index) {
+              final title = filteredData[index]['userName'] as String;
+
+              return ListTile(
+                title: Text(title),
+
+                // Implement action when a search result is tapped.
+                onTap: () {
+                  // Handle the tap event (e.g., navigate to details).
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}

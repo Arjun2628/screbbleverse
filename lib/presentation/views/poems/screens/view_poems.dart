@@ -87,7 +87,7 @@ class ViewPoems extends StatelessWidget {
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('poems')
-                    .orderBy('date_and_time', descending: true)
+                    .orderBy('time', descending: true)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -132,7 +132,7 @@ class ViewPoems extends StatelessWidget {
                               data['content_fontsize'].toString();
                           double contentFontSize =
                               double.parse(contentfontSizeString);
-                          DateTime poemTime = data['date_and_time'].toDate();
+                          DateTime poemTime = data['time'].toDate();
                           DateTime currentDateTime = DateTime.now();
                           Duration difference =
                               currentDateTime.difference(poemTime);
@@ -150,47 +150,80 @@ class ViewPoems extends StatelessWidget {
                               builder: (context, value, child) => Column(
                                 children: [
                                   Container(
-                                    height: 60,
                                     color: black,
-                                    child: ListTile(
-                                      leading: Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 10,
-                                        ),
-                                        child: CircleAvatar(
-                                          radius: 25,
-                                          backgroundColor: Colors.amber,
-                                          backgroundImage: NetworkImage(
-                                              data['user_profile_image']),
-                                        ),
-                                      ),
-                                      title: Text(
-                                        data['caption'],
-                                        style: buttonText,
-                                      ),
-                                      subtitle: Row(
-                                        children: [
-                                          Text(
-                                            data['user_name'],
-                                            style: buttonText,
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                          leading: Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 10,
+                                            ),
+                                            child: CircleAvatar(
+                                              radius: 25,
+                                              // backgroundColor: Colors.amber,
+                                              backgroundImage: NetworkImage(
+                                                  data['user_profile_image']),
+                                            ),
                                           ),
-                                          const SizedBox(
-                                            width: 5,
+                                          title: Row(
+                                            children: [
+                                              Text(
+                                                data['user_name'],
+                                                style: buttonText,
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              const CircleAvatar(
+                                                radius: 8,
+                                              )
+                                            ],
                                           ),
-                                          const CircleAvatar(
-                                            radius: 8,
-                                          )
-                                        ],
-                                      ),
-                                      trailing: Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 15,
+                                          subtitle: Container(
+                                            // color: Colors.amber,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 25),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "@${data['user_name']}",
+                                                    style: buttonText,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    timeDifference,
+                                                    style: buttonText,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          trailing: Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 15,
+                                            ),
+                                            child: Icon(
+                                              Icons.more_vert,
+                                              color: white,
+                                            ),
+                                          ),
                                         ),
-                                        child: Icon(
-                                          Icons.more_vert,
-                                          color: white,
-                                        ),
-                                      ),
+                                        // Padding(
+                                        //   padding:
+                                        //       const EdgeInsets.only(left: 80),
+                                        //   child: Text(
+                                        //     data['caption'],
+                                        //     style: buttonText,
+                                        //   ),
+                                        // ),
+                                      ],
                                     ),
                                   ),
                                   Container(
@@ -469,7 +502,15 @@ class ViewPoems extends StatelessWidget {
                                         ),
                                       )
                                     ],
-                                  )
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Text(
+                                      data['caption'],
+                                      style: buttonText,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

@@ -263,7 +263,7 @@ class ViewProfile extends StatelessWidget {
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Image.asset(
-                                      'miscellaneous-rectangle-pin.png'),
+                                      'lib/data/datasources/local/images/miscellaneous-rectangle-pin.png'),
                                 ),
                               ))
                         ],

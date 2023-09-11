@@ -9,6 +9,7 @@ import 'package:scribbleverse/domain/provider/poems/comments_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/writting_provider.dart';
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
+import 'package:scribbleverse/domain/provider/search/user_search_provider.dart';
 import 'package:scribbleverse/domain/provider/short_stories/read_short_story_provider.dart';
 import 'package:scribbleverse/presentation/views/authentication/screens/login_screen.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CommentsProvider()),
         ChangeNotifierProvider(create: (context) => ReadShortStoriesProvider()),
         ChangeNotifierProvider(create: (context) => AddBooksProvider()),
+        ChangeNotifierProvider(create: (context) => UserSearchProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

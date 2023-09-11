@@ -35,11 +35,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   dictionaryx: null
   epub_view: ^3.2.0
+  epubx: ^4.0.0
   file_picker: ^5.5.0
   firebase_auth: ^4.7.1
   firebase_core: ^2.15.0
   firebase_database: ^10.2.4
-  firebase_storage: ^11.2.5
+  firebase_storage: ^11.2.6
   flutter:
     sdk: flutter
   flutter_facebook_auth: ^6.0.0
@@ -79,6 +80,7 @@ flutter:
   assets:
     - lib/data/datasources/local/images/
     - lib/data/datasources/local/lottie/
+    - lib/data/datasources/local/ebooks/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

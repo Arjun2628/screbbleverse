@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
+import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/domain/provider/short_stories/read_short_story_provider.dart';
 import 'package:scribbleverse/presentation/views/short_stories/widgets/add_cover.dart';
 import 'package:uuid/uuid.dart';
@@ -218,58 +220,67 @@ class AddCaptionShortStory extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 25),
                             child: Consumer<ReadShortStoriesProvider>(
                               builder: (context, value, child) =>
-                                  GestureDetector(
-                                onTap: () async {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Lottie.asset(
-                                          'lib/data/datasources/local/lottie/animation_lm0crmem.json',
-                                          width: 50,
-                                          height: 100,
-                                        ),
-                                      );
-                                    },
-                                  );
-                                  await value.cloudAdd(value.photo!);
-                                  String uuid = Uuid().v4();
-                                  DateTime date = DateTime.now();
-                                  Map<String, dynamic> data = {
-                                    'writting': value.controller.text,
-                                    'short_story_id': uuid,
-                                    'short_story_name':
-                                        value.shortStoryNameController.text,
-                                    'discription': value
-                                        .shortStoryDiscriptionController.text,
-                                    'content_type': value.contentType,
-                                    'cover_photo': value.imageUri,
-                                    'time': date,
-                                    'all': 'all'
-                                  };
+                                  Consumer<PublicProvider>(
+                                builder: (context, user, child) =>
+                                    GestureDetector(
+                                  onTap: () async {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Lottie.asset(
+                                            'lib/data/datasources/local/lottie/animation_lm0crmem.json',
+                                            width: 50,
+                                            height: 100,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                    await value.cloudAdd(value.photo!);
+                                    String uuid = Uuid().v4();
+                                    DateTime date = DateTime.now();
+                                    Map<String, dynamic> data = {
+                                      'writting': value.controller.text,
+                                      'short_story_id': uuid,
+                                      'short_story_name':
+                                          value.shortStoryNameController.text,
+                                      'discription': value
+                                          .shortStoryDiscriptionController.text,
+                                      'content_type': value.contentType,
+                                      'cover_photo': value.imageUri,
+                                      'time': date,
+                                      'all': 'all',
+                                      'user_name': user.user!.userName,
+                                      'user_about': user.user!.about,
+                                      'user_profile': user.user!.profileImage,
+                                      'user_id': FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      'type': 'short_story'
+                                    };
 
-                                  await FirebaseFirestore.instance
-                                      .collection('short_stories')
-                                      .doc(uuid)
-                                      .set(data);
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pop(context);
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pop(context);
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Submit',
-                                      style: buttonTextBlack,
+                                    await FirebaseFirestore.instance
+                                        .collection('short_stories')
+                                        .doc(uuid)
+                                        .set(data);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.white,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Submit',
+                                        style: buttonTextBlack,
+                                      ),
                                     ),
                                   ),
                                 ),

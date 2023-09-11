@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:epub_view/epub_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:scribbleverse/domain/provider/books/screens/add_book_provider.dart';
 
 class MyApp1 extends StatefulWidget {
   MyApp1({Key? key, required this.eUrl})
@@ -86,12 +88,24 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     if (widget.eUrl != null) {
       _epubReaderController = EpubController(
-          document: EpubDocument.openData(
-        Uri.parse(
-                "https://firebasestorage.googleapis.com/v0/b/scribbleverse-b95d4.appspot.com/o/epub_files%2Fyour_file_name.epub?alt=media&token=e518b846-1404-4d91-b550-39f41c767455https://firebasestorage.googleapis.com/v0/b/scribbleverse-b95d4.appspot.com/o/epub_files%2Fyour_file_name.epub?alt=media&token=e518b846-1404-4d91-b550-39f41c767455")
-            .data as Uint8List,
-      )
-          // EpubDocument.openAsset(
+          document:
+              //      EpubDocument.openData(
+              //   Uri.parse(
+              //           "https://firebasestorage.googleapis.com/v0/b/scribbleverse-b95d4.appspot.com/o/epub_files%2Fyour_file_name.epub?alt=media&token=e518b846-1404-4d91-b550-39f41c767455https://firebasestorage.googleapis.com/v0/b/scribbleverse-b95d4.appspot.com/o/epub_files%2Fyour_file_name.epub?alt=media&token=e518b846-1404-4d91-b550-39f41c767455")
+              //       .data as Uint8List,
+              // )
+              // EpubDocument.openFile(
+              // Provider.of<AddBooksProvider>(context, listen: false)
+              //     .fileLocation!)
+              // EpubDocument.openAsset(
+              //     "lib/data/datasources/local/ebooks/Half_Girlfriend_-_Chetan_Bhagat (2).epub")
+              EpubDocument.openData(
+                  Provider.of<AddBooksProvider>(context, listen: false)
+                      .eCoverted!)
+          // EpubDocument.openData(
+          //     Provider.of<AddBooksProvider>(context, listen: false)
+          //         .fileLocation!)
+
           //     'epub/lib/assets/Half_Girlfriend_-_Chetan_Bhagat.epub'),
           // epubCfi: widget.eUrl
           // 'epubcfi(/6/26[id4]!/4/2/2[id4]/22)', // book.epub Chapter 3 paragraph 10

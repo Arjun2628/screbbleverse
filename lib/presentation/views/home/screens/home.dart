@@ -6,6 +6,7 @@ import 'package:scribbleverse/config/theams/colors.dart';
 
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/presentation/views/books/screens/add_books.dart';
+import 'package:scribbleverse/presentation/views/search/search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,36 +23,10 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Consumer<PublicProvider>(
         builder: (context, value, child) => Stack(
-          children: [
-            // _pages[_currentIndex],
-            // value.currentIndex != 24
-            value.pages[value.currentIndex]
-            // : value.trending == true
-            //     ? One()
-            //     : value.poems == true
-            //         ? Two()s
-            //         : value.shortStories == true
-            //             ? Three()
-            //             : AddPoems()
-          ],
+          children: [value.pages[value.currentIndex]],
         ),
       ),
-      //  SafeArea(
-
-      // )
-
       bottomNavigationBar: const BottomBar(),
-      // floatingActionButton:
-      //     Provider.of<PublicProvider>(context, listen: false).currentIndex ==
-      //                 4 ||
-      //             Provider.of<PublicProvider>(context, listen: false)
-      //                     .currentIndex ==
-      //                 5
-      //         ? FloatingActionButton(
-      //             onPressed: () {},
-      //             child: Text('add'),
-      //           )
-      //         : null,
     );
   }
 }
@@ -67,26 +42,20 @@ class BottomBar extends StatelessWidget {
       builder: (context, value, child) => BottomNavigationBar(
           showSelectedLabels: false,
           onTap: (index) async {
-            // if (value.currentIndex != 2) {
-            // await value.getUserData();
             if (index == 1) {
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => const AddBooks(),
+              //     ));
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddBooks(),
+                    builder: (context) => SearchUsers(),
                   ));
             } else {
               value.pageSelection(index);
             }
-            // value.pageSelection(index);
-            // }
-            //  else {
-            //   // Navigator.push(
-            //   //     context,
-            //   //     MaterialPageRoute(
-            //   //       builder: (context) => AddPoems(),
-            //   //     ));
-            // }
           },
           items: const [
             BottomNavigationBarItem(
@@ -98,10 +67,6 @@ class BottomBar extends StatelessWidget {
               icon: Icon(Icons.search),
               label: 'Page 1',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.add),
-            //   label: 'Page 2',
-            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.notifications),
               label: 'Page 3',

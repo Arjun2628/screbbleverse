@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
+import 'package:scribbleverse/domain/provider/books/screens/add_book_provider.dart';
+import 'package:scribbleverse/domain/provider/books/screens/view_books.dart';
 import 'package:scribbleverse/presentation/views/books/screens/add_books.dart';
+import 'package:scribbleverse/presentation/views/home/widgets/home_widget.dart';
 
 import '../../../../config/theams/colors.dart';
 
@@ -66,6 +70,7 @@ class ViewBooks extends StatelessWidget {
                 //     ),
                 //   ],
                 // ),
+
                 Container(
                   height: 130,
                   width: double.infinity,
@@ -96,7 +101,7 @@ class ViewBooks extends StatelessWidget {
                               height: double.infinity,
                               width: double.infinity,
                               // color: Colors.amber,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage(
                                           'lib/data/datasources/local/images/[removal.ai]_9f970741-cd23-4c84-bc36-927ff50c9b24-images.png'))),
@@ -107,10 +112,10 @@ class ViewBooks extends StatelessWidget {
                     ],
                   ),
                 ),
-                BooksCategory(),
-                BooksCategory(),
-                BooksCategory(),
-                BooksCategory(),
+                BooksCategory(heading: 'Trending'),
+                BooksCategory(heading: 'Trending'),
+                BooksCategory(heading: 'Trending'),
+                BooksCategory(heading: 'Trending'),
               ],
             ),
           ),
@@ -121,9 +126,11 @@ class ViewBooks extends StatelessWidget {
 }
 
 class BooksCategory extends StatelessWidget {
-  const BooksCategory({
+  BooksCategory({
     super.key,
+    required this.heading,
   });
+  String heading;
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +142,7 @@ class BooksCategory extends StatelessWidget {
             height: 30,
             width: double.infinity,
             child: Text(
-              'Trending',
+              heading,
               style: buttonText,
             ),
           ),
@@ -149,7 +156,7 @@ class BooksCategory extends StatelessWidget {
             child: Expanded(
               child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('epub_files')
+                      .collection('books')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -167,14 +174,40 @@ class BooksCategory extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
+                        final document = snapshot.data!.docs[index];
+                        final data = document.data() as Map<String, dynamic>;
                         return Row(
                           children: [
-                            Container(
-                              height: double.infinity,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(5)),
+                            Stack(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    await Provider.of<AddBooksProvider>(context,
+                                            listen: false)
+                                        .getEpubFileFromFirebaseAsUnit8List(
+                                            data['book']);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              MyApp1(eUrl: ''),
+                                        ));
+                                  },
+                                  child: Container(
+                                    height: double.infinity,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Image.network(
+                                      Provider.of<AddBooksProvider>(context,
+                                              listen: false)
+                                          .coverUri[index],
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               width: 5,
