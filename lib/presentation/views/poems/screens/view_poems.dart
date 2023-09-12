@@ -403,6 +403,15 @@ class ViewPoems extends StatelessWidget {
                                                                     .currentUser!
                                                                     .uid)
                                                                 .set(count);
+                                                            // await FirebaseFirestore
+                                                            //     .instance
+                                                            //     .collection('users')
+                                                            //     .doc(data['user_id'])
+                                                            //     .collection('notification')
+                                                            //     .doc(auth
+                                                            //         .currentUser!
+                                                            //         .uid)
+                                                            //     .set();
                                                           },
                                                           child:
                                                               // const Icon(

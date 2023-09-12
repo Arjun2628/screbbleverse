@@ -40,6 +40,7 @@ class Page1 extends StatelessWidget {
             const HomeBar(
               index: 0,
             ),
+            // ElevatedButton(onPressed: () {}, child: Text('logout')),
             Expanded(
               child: Container(
                 // decoration: BoxDecoration(

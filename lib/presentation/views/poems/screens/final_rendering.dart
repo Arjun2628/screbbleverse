@@ -97,44 +97,6 @@ class PoemRendering extends StatelessWidget {
                       child: Consumer<PublicProvider>(
                         builder: (context, value, child) => Column(
                           children: [
-                            // Container(
-                            //   height: 60,
-                            //   color: white,
-                            //   child: ListTile(
-                            //     trailing: ElevatedButton(
-                            //         onPressed: () {}, child: Text('Add')),
-                            //     // leading: Padding(
-                            //     //   padding: const EdgeInsets.only(
-                            //     //     bottom: 10,
-                            //     //   ),
-                            //     //   child: CircleAvatar(
-                            //     //     radius: 25,
-                            //     //     backgroundColor: Colors.amber,
-                            //     //     backgroundImage:
-                            //     //         NetworkImage(value.user!.profileImage!),
-                            //     //   ),
-                            //     // ),
-                            //     // title: Text(
-                            //     //   'kjnlkbiubjkbohjnouhlklih',
-                            //     //   style: buttonTextBlack,
-                            //     // ),
-                            //     // subtitle: Row(
-                            //     //   children: [
-                            //     //     Text(
-                            //     //       value.user!.userName!,
-                            //     //       style: buttonTextBlack,
-                            //     //     ),
-                            //     //     const SizedBox(
-                            //     //       width: 5,
-                            //     //     ),
-                            //     //     const CircleAvatar(
-                            //     //       radius: 8,
-                            //     //     )
-                            //     //   ],
-                            //     // ),
-                            //     // trailing: Icon(Icons.more_vert_rounded),
-                            //   ),
-                            // ),
                             Container(
                               decoration: BoxDecoration(
                                   image: addPoem.image == '' ||
@@ -153,12 +115,6 @@ class PoemRendering extends StatelessWidget {
                                   SizedBox(
                                     height: 450,
                                     width: double.infinity,
-                                    // color: Colors.amber,
-                                    // decoration: BoxDecoration(
-                                    //     image: DecorationImage(
-                                    //         fit: BoxFit.cover,
-                                    //         image: AssetImage(value.templateList[
-                                    //             data['template_index']]))),
                                     child: Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           15, 15, 15, 0),

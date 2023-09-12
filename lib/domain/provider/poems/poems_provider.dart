@@ -728,21 +728,14 @@ class AddPoemProvider extends ChangeNotifier {
     };
 
     await FirebaseFirestore.instance.collection('poems').doc(uuid).set(data);
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(auth.currentUser!.uid)
-        .collection('posts')
-        .doc('poems')
-        .collection('poems')
-        .doc(uuid)
-        .set(data);
-    // .add(data);
     // await FirebaseFirestore.instance
     //     .collection('users')
     //     .doc(auth.currentUser!.uid)
     //     .collection('posts')
     //     .doc('poems')
-    //     .set(poemsData);
+    //     .collection('poems')
+    //     .doc(uuid)
+    //     .set(data);
 
     print('success');
   }

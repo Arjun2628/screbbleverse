@@ -5,6 +5,7 @@ import 'package:scribbleverse/domain/models/user_moder.dart';
 import 'package:scribbleverse/presentation/views/home/screens/home.dart';
 import 'package:scribbleverse/presentation/views/home/widgets/home_widget.dart';
 import 'package:scribbleverse/presentation/views/poems/screens/view_poems.dart';
+import 'package:scribbleverse/presentation/views/search/screens/search.dart';
 import 'package:scribbleverse/presentation/views/short_stories/screens/view_short_stories.dart';
 import 'package:scribbleverse/presentation/views/profile/screens/view_profile.dart';
 
@@ -25,7 +26,7 @@ class PublicProvider extends ChangeNotifier {
   int currentIndex = 0;
   final List<Widget> pages = [
     const Page1(),
-    const Page2(),
+    const SearchUsers(),
     // AddPoems(),
     const Page4(),
     const ViewProfile(),
@@ -98,5 +99,20 @@ class PublicProvider extends ChangeNotifier {
   editUser(UserModel data) {
     user = data;
     notifyListeners();
+  }
+
+  getPostCount(String uid) async {
+    final poems = await FirebaseFirestore.instance
+        .collection('poems')
+        .where("user_id", isEqualTo: uid)
+        .get();
+    final shortStories = await FirebaseFirestore.instance
+        .collection('poems')
+        .where("user_id", isEqualTo: uid)
+        .get();
+
+    final poemCount = poems.docs.length;
+    final shortStoryCount = shortStories.docs.length;
+    int count = poemCount + shortStoryCount;
   }
 }

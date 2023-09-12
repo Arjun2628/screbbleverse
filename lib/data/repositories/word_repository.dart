@@ -5,27 +5,6 @@ import 'package:scribbleverse/data/datasources/remote/dictionart_api.dart';
 
 import '../../domain/models/word_response.dart';
 
-// class WordRepository {
-//   Future<List<WordDefinition>> getWordFromDictionary(String query) async {
-//     final response = await HttpService.getRequest("en/$query");
-
-//     if (response.statusCode == 200) {
-//       final List<dynamic> jsonList = json.decode(response.body);
-//       final List<WordDefinition> words = [];
-//       WordDefinition? word;
-//       for (final jsonItem in jsonList) {
-//         print(jsonItem['']);
-//         final word = WordDefinition.fromJson(jsonItem);
-//         final word1 = Meaning.fromJson(jsonItem);
-//         words.add(word);
-//       }
-
-//       return words;
-//     } else {
-//       throw Exception('Failed to load word definitions');
-//     }
-//   }
-// }
 class WordRepository {
   Future<String> getWordFromDictionary(String query) async {
     final response = await HttpService.getRequest("en/$query");
@@ -54,10 +33,6 @@ class WordRepository {
                 // Check if 'definition' is a string
                 print(definition['definition']);
                 return definition['definition'];
-                print('Definition: $definition');
-                if (definition is String) {
-                  print('Definition: $definition');
-                }
               }
             }
 

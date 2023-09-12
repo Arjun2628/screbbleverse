@@ -46,7 +46,7 @@ class SubmitButton extends StatelessWidget {
                         }
 
                         if (value.photo != null || tittle == 'Edit') {
-                          value.validationImage('false');
+                          await value.validationImage('false');
                           if (userKey!.currentState!.validate() &&
                               phoneKey!.currentState!.validate() &&
                               aboutKey!.currentState!.validate()) {
@@ -73,17 +73,12 @@ class SubmitButton extends StatelessWidget {
                                   'gender': value.genderName,
                                   'phone': value.phoneController.text,
                                   'about': value.aboutController.text,
-                                  'profileImage': value.imageUri
+                                  'profileImage': value.imageUri,
+                                  'uid': FirebaseAuth.instance.currentUser!.uid
                                 };
                                 await value.addProfile(data);
-                                UserModel user = UserModel(
-                                    userName: value.usernameController.text,
-                                    dateOfBirth: value.formateDate,
-                                    gender: value.genderName,
-                                    phone: value.phoneController.text,
-                                    about: value.aboutController.text,
-                                    profileImage: value.imageUri);
-                                Provider.of<PublicProvider>(context,
+                                UserModel user = UserModel.fromJson(data);
+                                await Provider.of<PublicProvider>(context,
                                         listen: false)
                                     .editUser(user);
                                 // ignore: use_build_context_synchronously

@@ -6,7 +6,7 @@ import 'package:scribbleverse/config/theams/colors.dart';
 
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/presentation/views/books/screens/add_books.dart';
-import 'package:scribbleverse/presentation/views/search/search.dart';
+import 'package:scribbleverse/presentation/views/search/screens/search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -42,20 +42,19 @@ class BottomBar extends StatelessWidget {
       builder: (context, value, child) => BottomNavigationBar(
           showSelectedLabels: false,
           onTap: (index) async {
-            if (index == 1) {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => const AddBooks(),
-              //     ));
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SearchUsers(),
-                  ));
-            } else {
-              value.pageSelection(index);
-            }
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => const AddBooks(),
+            //     ));
+
+            value.pageSelection(index);
+
+            // Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => SearchUsers(),
+            //       ));
           },
           items: const [
             BottomNavigationBarItem(

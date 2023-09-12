@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
+import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
 import 'package:scribbleverse/domain/provider/profile/add_profile_provider.dart';
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
+import 'package:scribbleverse/presentation/views/authentication/screens/login_screen.dart';
+import 'package:scribbleverse/presentation/views/search/widgets/follow_button.dart';
 
 class ViewProfile extends StatelessWidget {
   const ViewProfile({super.key});
@@ -19,8 +24,8 @@ class ViewProfile extends StatelessWidget {
           child: Container(
             height: 310,
             width: double.infinity,
-            // color: Colors.amber,
             decoration: const BoxDecoration(
+                // color: Colors.amber,
                 image: DecorationImage(
                     fit: BoxFit.cover,
                     image: AssetImage(
@@ -69,11 +74,9 @@ class ViewProfile extends StatelessWidget {
                                               child: Center(
                                                 child: Column(
                                                   children: [
-                                                    Text(
-                                                      user.numberOfPosts
-                                                          .toString(),
-                                                      style: buttonText,
-                                                    ),
+                                                    PoemCount(
+                                                        uid: user.user!.uid!,
+                                                        style: normal),
                                                     Text(
                                                       'Post',
                                                       style: normal,
@@ -90,9 +93,10 @@ class ViewProfile extends StatelessWidget {
                                             child: Center(
                                               child: Column(
                                                 children: [
-                                                  Text(
-                                                    '0',
-                                                    style: buttonText,
+                                                  FollowersFollowingCount(
+                                                    uid: user.user!.uid!,
+                                                    style: normal,
+                                                    type: "following",
                                                   ),
                                                   Text(
                                                     'Following',
@@ -111,9 +115,10 @@ class ViewProfile extends StatelessWidget {
                                             child: Center(
                                               child: Column(
                                                 children: [
-                                                  Text(
-                                                    '0',
-                                                    style: buttonText,
+                                                  FollowersFollowingCount(
+                                                    uid: user.user!.uid!,
+                                                    style: normal,
+                                                    type: "followers",
                                                   ),
                                                   Text(
                                                     'Followers',
@@ -259,11 +264,22 @@ class ViewProfile extends StatelessWidget {
                               flex: 3,
                               child: Padding(
                                 padding: const EdgeInsets.all(30.0),
-                                child: SizedBox(
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  child: Image.asset(
-                                      'lib/data/datasources/local/images/miscellaneous-rectangle-pin.png'),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    await FirebaseAuth.instance.signOut();
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LoginScreen(),
+                                        ),
+                                        (route) => false);
+                                  },
+                                  child: SizedBox(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    child: Image.asset(
+                                        'lib/data/datasources/local/images/miscellaneous-rectangle-pin.png'),
+                                  ),
                                 ),
                               ))
                         ],
@@ -343,7 +359,107 @@ class ViewProfile extends StatelessWidget {
               ),
             ],
           ),
-        )
+        ),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            child: StreamBuilder<QuerySnapshot>(
+                stream:
+                    FirebaseFirestore.instance.collection('poems').snapshots(),
+                builder: (context, snapshot1) {
+                  if (snapshot1.hasError) {
+                    return Text('Error: ${snapshot1.error}');
+                  }
+                  if (snapshot1.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); // Loading indicator
+                  }
+
+                  // Process data from collection1
+                  final data1 = snapshot1.data!.docs;
+
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('short_stories')
+                        .snapshots(),
+                    builder: (context, snapshot2) {
+                      if (snapshot2.hasError) {
+                        return Text('Error: ${snapshot2.error}');
+                      }
+                      if (snapshot2.connectionState ==
+                          ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // Loading indicator
+                      }
+
+                      // Process data from collection2
+                      final data2 = snapshot2.data!.docs;
+
+                      // Combine and sort the data based on the timestamp field
+                      final combinedData = [...data1, ...data2];
+                      combinedData.sort((a, b) {
+                        final timestampA = a['time'] as Timestamp;
+                        final timestampB = b['time'] as Timestamp;
+                        return timestampA.compareTo(timestampB);
+                      });
+
+                      //  final  combinedData.reversed;
+
+                      // Now, you have sorted data in `combinedData`
+                      // You can build your UI using this data
+                      return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10),
+                        itemCount: combinedData.length,
+                        itemBuilder: (context, index) {
+                          final document = combinedData[index];
+                          final data = document.data() as Map<String, dynamic>;
+                          return data['type'] == 'poem'
+                              ? Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    Consumer<AddPoemProvider>(
+                                      builder: (context, value, child) =>
+                                          ColorFiltered(
+                                        colorFilter: backgroundFilter,
+                                        child: Image.asset(
+                                          value.templateList[
+                                              data['template_index']],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Consumer<AddPoemProvider>(
+                                      builder: (context, value, child) =>
+                                          Container(
+                                        height: 90,
+                                        width: double.infinity,
+                                      ),
+                                    ),
+                                    Center(
+                                        child: Text(
+                                      data['heading'],
+                                      style: buttonTextBlack,
+                                    ))
+                                  ],
+                                )
+                              : Container(
+                                  height: 90,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                              data['cover_photo']))),
+                                );
+                        },
+                      );
+                    },
+                  );
+                }),
+          ),
+        ))
       ],
     );
   }
