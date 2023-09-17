@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:scribbleverse/domain/models/user_moder.dart';
 
 class UserSearchProvider extends ChangeNotifier {
   List<Map<String, dynamic>> userList = [];
@@ -22,9 +23,13 @@ class UserSearchProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  addFollowes(String uid) async {
+  addFollowes(String uid, UserModel user) async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    Map<String, dynamic> data = {"uid": auth.currentUser!.uid};
+    Map<String, dynamic> data = {
+      "profile_image": user.profileImage,
+      "userName": user.userName,
+      "uid": auth.currentUser!.uid
+    };
     final snapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)

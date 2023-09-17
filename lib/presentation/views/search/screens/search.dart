@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/models/user_moder.dart';
+import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/domain/provider/search/user_search_provider.dart';
 import 'package:scribbleverse/presentation/views/profile/screens/view_other_user_profile.dart';
 import 'package:scribbleverse/presentation/views/search/widgets/follow_button.dart';
@@ -20,7 +21,7 @@ class SearchUsers extends StatelessWidget {
         ColorFiltered(
           colorFilter: backgroundFilter,
           child: Image.asset(
-            'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg',
+            'lib/data/datasources/local/images/BG58-01.jpg',
             fit: BoxFit.cover,
           ),
         ),
@@ -130,15 +131,17 @@ class _YourSearchWidgetState extends State<YourSearchWidget> {
                         userName,
                         style: buttonText,
                       ),
-                      trailing: ElevatedButton(
-                        onPressed: () async {
-                          Provider.of<UserSearchProvider>(context,
-                                  listen: false)
-                              .addFollowes(uid);
-                        },
-                        child: FollowButton(uid: uid, style: normalBlack),
+                      trailing: Consumer<PublicProvider>(
+                        builder: (context, user, child) => ElevatedButton(
+                          onPressed: () async {
+                            Provider.of<UserSearchProvider>(context,
+                                    listen: false)
+                                .addFollowes(uid, user.user!);
+                          },
+                          child: FollowButton(uid: uid, style: normalBlack),
 
-                        // Implement action when a search result is tapped.
+                          // Implement action when a search result is tapped.
+                        ),
                       ),
                     )),
               );

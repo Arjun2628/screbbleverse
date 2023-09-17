@@ -6,7 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
+import 'package:scribbleverse/presentation/views/daily_quotes/widgets/like_button.dart';
 import 'package:scribbleverse/presentation/views/poems/screens/writting_screen.dart';
+import 'package:scribbleverse/presentation/views/poems/widgets/comment_count.dart';
+import 'package:scribbleverse/presentation/views/poems/widgets/like_count.dart';
 import 'package:scribbleverse/presentation/views/poems/widgets/poem_comments.dart';
 import 'package:scribbleverse/presentation/views/poems/widgets/poem_likes.dart';
 
@@ -29,7 +32,7 @@ class ViewPoems extends StatelessWidget {
         ColorFiltered(
           colorFilter: backgroundFilter,
           child: Image.asset(
-            'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg',
+            'lib/data/datasources/local/images/BG58-01.jpg',
             fit: BoxFit.cover,
           ),
         ),
@@ -381,28 +384,13 @@ class ViewPoems extends StatelessWidget {
                                                     children: [
                                                       GestureDetector(
                                                           onTap: () async {
-                                                            FirebaseAuth auth =
-                                                                FirebaseAuth
-                                                                    .instance;
-                                                            Map<String, dynamic>
-                                                                count = {
-                                                              'user_id': auth
-                                                                  .currentUser!
-                                                                  .uid
-                                                            };
-
-                                                            await FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'poems')
-                                                                .doc(data[
-                                                                    'poem_id'])
-                                                                .collection(
-                                                                    'likes')
-                                                                .doc(auth
-                                                                    .currentUser!
-                                                                    .uid)
-                                                                .set(count);
+                                                            await Provider.of<
+                                                                        AddPoemProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .checkLikes(data[
+                                                                    'poem_id']);
                                                             // await FirebaseFirestore
                                                             //     .instance
                                                             //     .collection('users')
@@ -413,22 +401,46 @@ class ViewPoems extends StatelessWidget {
                                                             //         .uid)
                                                             //     .set();
                                                           },
-                                                          child:
-                                                              // const Icon(
-                                                              //   Icons.favorite,
-                                                              //   color: white,
-                                                              // ),
-                                                              PostWidget(
-                                                                  post:
-                                                                      document,
-                                                                  currentUser:
-                                                                      FirebaseAuth
-                                                                          .instance
-                                                                          .currentUser)),
-                                                      Text(
-                                                        'Likes',
-                                                        style: buttonText,
-                                                      ),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    top: 10),
+                                                            child: LikesButton(
+                                                                uid: data[
+                                                                    'poem_id'],
+                                                                baseCollection:
+                                                                    "poems"),
+                                                          )
+                                                          // const Icon(
+                                                          //   Icons.favorite,
+                                                          //   color: white,
+                                                          // ),
+
+                                                          // PostWidget(
+                                                          //     post:
+                                                          //         document,
+                                                          //     currentUser:
+                                                          //         FirebaseAuth
+                                                          //             .instance
+                                                          //             .currentUser)
+
+                                                          ),
+                                                      // Text(
+                                                      //   'Likes',
+                                                      //   style: buttonText,
+                                                      // ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 10,
+                                                                top: 10),
+                                                        child: PoemLikeCount(
+                                                            poemId:
+                                                                data['poem_id'],
+                                                            style: buttonText),
+                                                      )
                                                     ],
                                                   ),
                                                   // Text('86752')
@@ -466,9 +478,17 @@ class ViewPoems extends StatelessWidget {
                                                     Icons.comment,
                                                     color: white,
                                                   ),
-                                                  Text(
-                                                    'Comments',
-                                                    style: buttonText,
+                                                  // Text(
+                                                  //   'Comments',
+                                                  //   style: buttonText,
+                                                  // ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10),
+                                                    child: CommentCount(
+                                                        uid: data['poem_id'],
+                                                        style: buttonText),
                                                   )
                                                 ],
                                               ),

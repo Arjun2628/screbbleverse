@@ -138,73 +138,99 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
       height: double.infinity,
       width: double.infinity,
       decoration: const BoxDecoration(
-          color: black,
-          image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage(
-                  'lib/data/datasources/local/images/Screenshot (87).png'))),
-      child: GestureDetector(
-        onScaleStart: (details) {
-          _previousScale = _scale;
-        },
-        onScaleUpdate: (details) {},
-        child: Consumer<ReadShortStoriesProvider>(
-          builder: (context, value, child) => SelectableText.rich(
-            TextSpan(
-                text: substring,
-                style: const TextStyle(
-                    color: Colors.black, fontFamily: 'Lato-Regular')),
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
-            onTap: () {
-              print('Tapped');
-            },
-            // contextMenuBuilder: (context, editableTextState) {
-            //   return buildCustomContextMenu(
-            //       context, editableTextState as TextSelection);
-            // },
-            toolbarOptions:
-                const ToolbarOptions(copy: true, selectAll: true, cut: true),
-            showCursor: true,
-            cursorWidth: 2,
-            onSelectionChanged: (selection, cause) async {
-              Provider.of<PublicProvider>(context, listen: false)
-                  .getMeaning(null);
-              final selectedTextStart = selection.baseOffset;
-              final selectedTextEnd = selection.extentOffset;
-              String word =
-                  substring.substring(selectedTextStart, selectedTextEnd);
-              // Future.delayed(Duration(seconds: 5));
-              if (cause == SelectionChangedCause.longPress) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      backgroundColor: black,
-                      title: Consumer<PublicProvider>(
-                          builder: (context, value, child) =>
-                              value.meaning != null
-                                  ? Text(
-                                      value.meaning!,
-                                      style: buttonText,
-                                    )
-                                  : Center(
-                                      child: CircularProgressIndicator(
-                                      color: white,
-                                    ))),
-                    );
-                  },
-                );
-              }
+        color: black,
+        // image: DecorationImage(
+        //     fit: BoxFit.cover,
+        //     image:
+        //         AssetImage('lib/data/datasources/local/images/BG58-01.jpg'))
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(
+                width: 1,
+              )),
+              child: GestureDetector(
+                onScaleStart: (details) {
+                  _previousScale = _scale;
+                },
+                onScaleUpdate: (details) {},
+                child: Consumer<ReadShortStoriesProvider>(
+                  builder: (context, value, child) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SelectableText.rich(
+                      TextSpan(
+                          text: substring,
+                          style: const TextStyle(
+                              color: white, fontFamily: 'Lato-Regular')),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 23),
+                      onTap: () {
+                        print('Tapped');
+                      },
+                      // contextMenuBuilder: (context, editableTextState) {
+                      //   return buildCustomContextMenu(
+                      //       context, editableTextState as TextSelection);
+                      // },
+                      toolbarOptions: const ToolbarOptions(
+                          copy: true, selectAll: true, cut: true),
+                      showCursor: true,
+                      cursorWidth: 2,
+                      onSelectionChanged: (selection, cause) async {
+                        Provider.of<PublicProvider>(context, listen: false)
+                            .getMeaning(null);
+                        final selectedTextStart = selection.baseOffset;
+                        final selectedTextEnd = selection.extentOffset;
+                        String word = substring.substring(
+                            selectedTextStart, selectedTextEnd);
+                        // Future.delayed(Duration(seconds: 5));
+                        if (cause == SelectionChangedCause.longPress) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: black,
+                                title: Consumer<PublicProvider>(
+                                    builder: (context, value, child) => value
+                                                .meaning !=
+                                            null
+                                        ? Text(
+                                            value.meaning!,
+                                            style: buttonText,
+                                          )
+                                        : Center(
+                                            child: CircularProgressIndicator(
+                                            color: white,
+                                          ))),
+                              );
+                            },
+                          );
+                        }
 
-              String meaning = await lookupWord(word);
-              Provider.of<PublicProvider>(context, listen: false)
-                  .getMeaning(meaning);
-              // ignore: use_build_context_synchronously
-            },
-            selectionControls: controller,
-            cursorColor: Colors.black,
-            cursorRadius: const Radius.circular(5),
-          ),
+                        String meaning = await lookupWord(word);
+                        Provider.of<PublicProvider>(context, listen: false)
+                            .getMeaning(meaning);
+                        // ignore: use_build_context_synchronously
+                      },
+                      selectionControls: controller,
+                      cursorColor: Colors.black,
+                      cursorRadius: const Radius.circular(5),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+                bottom: 5,
+                right: 5,
+                child: Text(
+                  index.toString(),
+                  style: normal,
+                ))
+          ],
         ),
       ),
     );

@@ -60,7 +60,7 @@ class _PostWidgetState extends State<PostWidget> {
 
         // Update the like status in Firestore
         FirebaseFirestore.instance
-            .collection('posts')
+            .collection('poems')
             .doc(widget.post.id)
             .update({
           'likes':
@@ -75,7 +75,7 @@ class _PostWidgetState extends State<PostWidget> {
         'user_id': FirebaseAuth.instance.currentUser!.uid
       };
       await FirebaseFirestore.instance
-          .collection('posts/${widget.post.id}/likes')
+          .collection('poems/${widget.post.id}/likes')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set(data);
       await FirebaseFirestore.instance

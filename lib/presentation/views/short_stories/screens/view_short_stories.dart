@@ -27,7 +27,7 @@ class ViewShortStories extends StatelessWidget {
         ColorFiltered(
           colorFilter: backgroundFilter,
           child: Image.asset(
-            'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg',
+            'lib/data/datasources/local/images/BG58-01.jpg',
             fit: BoxFit.cover,
           ),
         ),

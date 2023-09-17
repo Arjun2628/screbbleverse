@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
+import 'package:scribbleverse/domain/provider/daily_quotes/daily_quotes_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
+import 'package:scribbleverse/presentation/views/poems/screens/add_poems.dart';
 import 'package:scribbleverse/presentation/views/poems/widgets/poem_template.dart';
 
-class AddPoems extends StatelessWidget {
+class AddDailyQuotes extends StatelessWidget {
   static const String routName = '/add_poems';
 
-  const AddPoems({super.key});
+  const AddDailyQuotes({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,19 +27,40 @@ class AddPoems extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Expanded(child: Container()),
+                  Expanded(
+                      child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20, top: 10),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            Text(
+                              'Daily quotes',
+                              style: headdingText,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Icon(
+                              Icons.draw_sharp,
+                              color: white,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  )),
                   Padding(
                     padding: const EdgeInsets.only(right: 15, top: 15),
                     child: GestureDetector(
                       onTap: () async {
-                        Provider.of<AddPoemProvider>(context, listen: false)
-                            .finalOutText();
-                        Navigator.pushNamed(context, '/render_poem');
-                        // await Provider.of<AddPoemProvider>(context,
-                        //         listen: false)
-                        //     .addPoem(Provider.of<PublicProvider>(context,
-                        //             listen: false)
-                        //         .user);
+                        await Provider.of<AddDailyQuotesProvider>(context,
+                                listen: false)
+                            .addDailyQuotes(Provider.of<PublicProvider>(context,
+                                    listen: false)
+                                .user);
+                        Navigator.pop(context);
                       },
                       child: Container(
                         height: 35,
@@ -68,7 +91,7 @@ class AddPoems extends StatelessWidget {
                   ),
                 ],
               ),
-              Consumer<AddPoemProvider>(
+              Consumer<AddDailyQuotesProvider>(
                 builder: (context, addPoem, child) => Padding(
                   padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                   child: Container(
@@ -76,48 +99,54 @@ class AddPoems extends StatelessWidget {
                     width: double.infinity,
                     // color: Colors.white,
                     decoration: BoxDecoration(
-                        image: addPoem.templateIndex == 4
-                            ? addPoem.photo != null
-                                ? DecorationImage(
-                                    // opacity: 0.9,
-                                    opacity: addPoem.backgroundOpacity,
-                                    fit: BoxFit.cover,
-                                    image: FileImage(addPoem.photo!),
-                                  )
-                                : DecorationImage(
-                                    fit: BoxFit.cover,
-                                    opacity: addPoem.backgroundOpacity,
-                                    image: AssetImage(addPoem.templateList[0]))
-                            : DecorationImage(
-                                fit: BoxFit.cover,
-                                opacity: addPoem.backgroundOpacity,
-                                image: AssetImage(addPoem.template))),
+                        image: DecorationImage(
+                      fit: BoxFit.cover,
+                      opacity: addPoem.backgroundOpacity,
+                      image: AssetImage(
+                          "lib/data/datasources/local/images/[removal.ai]_255b6677-8f24-488b-b257-fb567e6e9474-617fa35f9105137354ee05460ae611b7.png"),
+                      //  addPoem.templateIndex == 4
+                      //     ? addPoem.photo != null
+                      //         ? DecorationImage(
+                      //             // opacity: 0.9,
+                      //             opacity: addPoem.backgroundOpacity,
+                      //             fit: BoxFit.cover,
+                      //             image: FileImage(addPoem.photo!),
+                      //           )
+                      //         : DecorationImage(
+                      //             fit: BoxFit.cover,
+                      //             opacity: addPoem.backgroundOpacity,
+                      //             image: AssetImage(addPoem.templateList[0]))
+                      //     : DecorationImage(
+                      //         fit: BoxFit.cover,
+                      //         opacity: addPoem.backgroundOpacity,
+                      //         image: AssetImage(addPoem.template))
+                    )),
                     child: Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.fromLTRB(75, 85, 65, 65),
                       child: ListView(
                         children: [
-                          TextField(
-                            controller: addPoem.addPoemHeadController,
-                            focusNode: addPoem.headingFocusNode,
-                            // style: TextStyle(
-                            //     fontSize: 20, color: addPoem.headingColor),
-                            style: addPoem.selectedFontTextStyleHeading,
-                            onTap: () {
-                              FocusScope.of(context)
-                                  .requestFocus(addPoem.headingFocusNode);
-                              addPoem.focus('heading');
-                            },
-                            textAlign: addPoem.textAlignHead,
-                            decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                    onPressed: () {
-                                      addPoem.colorArea(context);
-                                    },
-                                    icon: const Icon(
-                                      Icons.color_lens,
-                                      color: Colors.black,
-                                    ))),
-                          ),
+                          // TextField(
+                          //   controller: addPoem.addPoemHeadController,
+                          //   focusNode: addPoem.headingFocusNode,
+                          //   // style: TextStyle(
+                          //   //     fontSize: 20, color: addPoem.headingColor),
+                          //   style: addPoem.selectedFontTextStyleHeading,
+                          //   onTap: () {
+                          //     FocusScope.of(context)
+                          //         .requestFocus(addPoem.headingFocusNode);
+                          //     addPoem.focus('heading');
+                          //   },
+                          //   textAlign: addPoem.textAlignHead,
+                          //   decoration: InputDecoration(
+                          //       suffixIcon: IconButton(
+                          //           onPressed: () {
+                          //             addPoem.colorArea(context);
+                          //           },
+                          //           icon: const Icon(
+                          //             Icons.color_lens,
+                          //             color: Colors.black,
+                          //           ))),
+                          // ),
                           TextSelectionTheme(
                             data: TextSelectionThemeData(
                               selectionColor: Colors
@@ -143,8 +172,8 @@ class AddPoems extends StatelessWidget {
                                   selection.end,
                                 );
                               },
-                              maxLines: 15,
-                              maxLength: 1000,
+                              maxLines: 9,
+                              maxLength: 200,
                             ),
                           ),
                         ],
@@ -153,7 +182,7 @@ class AddPoems extends StatelessWidget {
                   ),
                 ),
               ),
-              Consumer<AddPoemProvider>(
+              Consumer<AddDailyQuotesProvider>(
                 builder: (context, value, child) => Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                   child: Container(
@@ -176,7 +205,7 @@ class AddPoems extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Consumer<AddPoemProvider>(
+      bottomNavigationBar: Consumer<AddDailyQuotesProvider>(
         builder: (context, value, child) => BottomNavigationBar(
             onTap: (index) async {
               if (index == 1) {
@@ -230,7 +259,7 @@ class AddPoems extends StatelessWidget {
                                           EdgeInsets.symmetric(horizontal: 10),
                                       child: Row(
                                         children: [
-                                          Consumer<AddPoemProvider>(
+                                          Consumer<AddDailyQuotesProvider>(
                                               builder: (context, poem, child) =>
                                                   Text(poem.focusContent == true
                                                       ? poem.currentFont
@@ -333,7 +362,7 @@ class AddPoems extends StatelessWidget {
                                         //    onChanged: onChanged),
                                         child: Row(
                                           children: [
-                                            Consumer<AddPoemProvider>(
+                                            Consumer<AddDailyQuotesProvider>(
                                               builder: (context, poem1,
                                                       child) =>
                                                   Flexible(
@@ -480,7 +509,7 @@ class AddPoems extends StatelessWidget {
                                   // ),
                                 ],
                               ),
-                              Consumer<AddPoemProvider>(
+                              Consumer<AddDailyQuotesProvider>(
                                 builder: (context, slider, child) => Slider(
                                   value: slider.sliderValue,
                                   min: 0,
@@ -518,144 +547,6 @@ class AddPoems extends StatelessWidget {
               BottomNavigationBarItem(
                   icon: Icon(Icons.arrow_drop_down), label: 'templates')
             ]),
-      ),
-    );
-  }
-}
-
-class BottomSheetIconTemplate2 extends StatelessWidget {
-  const BottomSheetIconTemplate2({
-    super.key,
-    this.icon,
-    required this.selected,
-  });
-
-  final Widget? icon;
-  final String selected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Flexible(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Consumer<AddPoemProvider>(
-          builder: (context, value, child) => GestureDetector(
-            onTap: () {
-              value.bottomSheetIconSelection(
-                  selected, value.focusHead == true ? 'heading' : 'content');
-            },
-            child: SizedBox(
-                height: 45,
-                width: double.infinity,
-                // color: Colors.amber,
-                child: icon),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class BottomSheetIconTemplate extends StatelessWidget {
-  const BottomSheetIconTemplate({
-    super.key,
-    this.icon,
-    required this.selected,
-  });
-  final Widget? icon;
-  final String selected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Flexible(
-      flex: 1,
-      child: Consumer<AddPoemProvider>(
-        builder: (context, value, child) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GestureDetector(
-            onTap: () {
-              value.bottomSheetIconSelectionStyling(
-                  selected, value.focusHead == true ? 'heading' : 'content');
-            },
-            child: SizedBox(
-              height: 45,
-              width: double.infinity,
-              // color: Colors.amber,
-              child: icon,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class DropdownButtonExample extends StatefulWidget {
-  const DropdownButtonExample({super.key});
-
-  @override
-  State<DropdownButtonExample> createState() => _DropdownButtonExampleState();
-}
-
-class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  @override
-  Widget build(BuildContext context) {
-    List<String> fontList = <String>['One', 'Two', 'Three', 'Four'];
-    String dropdownValue = fontList.first;
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_drop_down),
-      isExpanded: true,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? value) {
-        // This is called when the user selects an item.
-        setState(() {
-          dropdownValue = value!;
-        });
-      },
-      items: fontList.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class ProgressBarDemo extends StatefulWidget {
-  @override
-  _ProgressBarDemoState createState() => _ProgressBarDemoState();
-}
-
-class _ProgressBarDemoState extends State<ProgressBarDemo> {
-  double _progressValue = 0.5; // Initial progress value
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Movable Linear Progress Bar')),
-      body: Center(
-        child: GestureDetector(
-          onPanUpdate: (details) {
-            setState(() {
-              // Calculate the new progress value based on the pan distance
-              _progressValue += details.delta.dx / context.size!.width;
-              // Ensure the progress value stays within the valid range
-              _progressValue = _progressValue.clamp(0.0, 1.0);
-            });
-          },
-          child: LinearProgressIndicator(
-            value: _progressValue,
-            minHeight: 20.0,
-          ),
-        ),
       ),
     );
   }

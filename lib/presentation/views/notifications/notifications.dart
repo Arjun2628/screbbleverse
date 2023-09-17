@@ -16,7 +16,7 @@ class Page4 extends StatelessWidget {
         ColorFiltered(
           colorFilter: backgroundFilter,
           child: Image.asset(
-            'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg',
+            'lib/data/datasources/local/images/BG58-01.jpg',
             fit: BoxFit.cover,
           ),
         ),
@@ -101,6 +101,7 @@ class NotificationWidget extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
                             decoration: BoxDecoration(
+                                color: black,
                                 border: Border.all(width: 1, color: white),
                                 borderRadius: BorderRadius.circular(15)),
                             child: ListTile(

@@ -8,6 +8,8 @@ import 'package:scribbleverse/domain/provider/profile/add_profile_provider.dart'
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/domain/provider/search/user_search_provider.dart';
 import 'package:scribbleverse/presentation/views/authentication/screens/login_screen.dart';
+import 'package:scribbleverse/presentation/views/profile/screens/view_connections.dart';
+import 'package:scribbleverse/presentation/views/profile/screens/view_profile.dart';
 import 'package:scribbleverse/presentation/views/search/screens/search.dart';
 import 'package:scribbleverse/presentation/views/search/widgets/follow_button.dart';
 
@@ -112,18 +114,31 @@ class ViewOtherProfile extends StatelessWidget {
                                             height: double.infinity,
                                             width: double.infinity,
                                             child: Center(
-                                              child: Column(
-                                                children: [
-                                                  FollowersFollowingCount(
-                                                    uid: user.uid!,
-                                                    style: normal,
-                                                    type: "followers",
-                                                  ),
-                                                  Text(
-                                                    'Followers',
-                                                    style: normal,
-                                                  ),
-                                                ],
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ViewFollowers(
+                                                                uid: user.uid!,
+                                                                colloctionName:
+                                                                    "followers"),
+                                                      ));
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    FollowersFollowingCount(
+                                                      uid: user.uid!,
+                                                      style: normal,
+                                                      type: "followers",
+                                                    ),
+                                                    Text(
+                                                      'Followers',
+                                                      style: normal,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -201,7 +216,7 @@ class ViewOtherProfile extends StatelessWidget {
                                                               context,
                                                               listen: false)
                                                           .addFollowes(
-                                                              user.uid!);
+                                                              user.uid!, user);
                                                     },
                                                     child: Container(
                                                       width: double.infinity,
@@ -349,7 +364,8 @@ class ViewOtherProfile extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
+          ViewPosts(uid: user.uid!)
         ],
       ),
     );

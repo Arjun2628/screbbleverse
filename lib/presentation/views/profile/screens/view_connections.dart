@@ -5,70 +5,117 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/models/user_moder.dart';
+import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/domain/provider/search/user_search_provider.dart';
 import 'package:scribbleverse/presentation/views/profile/screens/view_other_user_profile.dart';
 import 'package:scribbleverse/presentation/views/search/screens/search.dart';
 import 'package:scribbleverse/presentation/views/search/widgets/follow_button.dart';
 
 class ViewFollowers extends StatelessWidget {
-  const ViewFollowers({super.key});
+  const ViewFollowers(
+      {super.key, required this.uid, required this.colloctionName});
+
+  final String uid;
+  final String colloctionName;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        ColorFiltered(
-          colorFilter: backgroundFilter,
-          child: Image.asset(
-            'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg',
-            fit: BoxFit.cover,
-          ),
-        ),
-        SafeArea(
-          child: Container(
-            height: double.infinity,
-            width: double.infinity,
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .where("uid",
-                      isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                      child:
-                          CircularProgressIndicator()); // Show a loading indicator.
-                }
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                }
-
-                // Process the data from the Firestore collection.
-                final data = snapshot.data!.docs;
-
-                return YourSearchWidget(
-                    data); // Replace with your search widget.
-              },
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          ColorFiltered(
+            colorFilter: backgroundFilter,
+            child: Image.asset(
+              'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg',
+              fit: BoxFit.cover,
             ),
           ),
-        ),
-      ],
+          SafeArea(
+            child: Container(
+              height: double.infinity,
+              width: double.infinity,
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(uid)
+                    .collection(colloctionName)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                        child:
+                            CircularProgressIndicator()); // Show a loading indicator.
+                  }
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+
+                  // Process the data from the Firestore collection.
+                  final data = snapshot.data!.docs;
+
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      final document = snapshot.data!.docs[index];
+                      final data = document.data() as Map<String, dynamic>;
+                      return Card(
+                        color: Colors.grey.withOpacity(0.5),
+                        child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(data['profile_image']),
+                            ),
+                            title: Text(
+                              data['userName'],
+                              style: buttonText,
+                            ),
+                            trailing: Consumer<PublicProvider>(
+                              builder: (context, user, child) => ElevatedButton(
+                                onPressed: () async {
+                                  Provider.of<UserSearchProvider>(context,
+                                          listen: false)
+                                      .addFollowes(uid, user.user!);
+                                },
+                                child:
+                                    FollowButton(uid: uid, style: normalBlack),
+
+                                //   // Implement action when a search result is tapped.
+                                // ),
+                              ),
+                            )),
+                      );
+                    },
+                  );
+                  //  ListTile(
+                  //   title: Text(
+                  //     'data',
+                  //     style: buttonText,
+                  //   ),
+                  // );
+                  // YourSearchWidget(
+                  //     data); // Replace with your search widget.
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class YFollowerWidget extends StatefulWidget {
+class FollowerWidget extends StatefulWidget {
   final List<QueryDocumentSnapshot> data;
 
-  YFollowerWidget(this.data);
+  FollowerWidget(this.data);
 
   @override
   _ViewFollowerWidgetState createState() => _ViewFollowerWidgetState();
 }
 
-class _ViewFollowerWidgetState extends State<YFollowerWidget> {
+class _ViewFollowerWidgetState extends State<FollowerWidget> {
   String query = ''; // User input
 
   List<QueryDocumentSnapshot> get filteredData {
@@ -131,15 +178,17 @@ class _ViewFollowerWidgetState extends State<YFollowerWidget> {
                         userName,
                         style: buttonText,
                       ),
-                      trailing: ElevatedButton(
-                        onPressed: () async {
-                          Provider.of<UserSearchProvider>(context,
-                                  listen: false)
-                              .addFollowes(uid);
-                        },
-                        child: FollowButton(uid: uid, style: normalBlack),
+                      trailing: Consumer<PublicProvider>(
+                        builder: (context, user, child) => ElevatedButton(
+                          onPressed: () async {
+                            Provider.of<UserSearchProvider>(context,
+                                    listen: false)
+                                .addFollowes(uid, user.user!);
+                          },
+                          child: FollowButton(uid: uid, style: normalBlack),
 
-                        // Implement action when a search result is tapped.
+                          // Implement action when a search result is tapped.
+                        ),
                       ),
                     )),
               );

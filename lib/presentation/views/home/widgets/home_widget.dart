@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
+import 'package:scribbleverse/domain/provider/daily_quotes/daily_quotes_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/presentation/views/books/screens/view_books.dart';
+import 'package:scribbleverse/presentation/views/daily_quotes/screens/view_daily_quotes.dart';
+import 'package:scribbleverse/presentation/widgets/skeleton_widgets/home/daily_quotes_skeleton.dart';
+import 'package:scribbleverse/presentation/widgets/skeleton_widgets/home/home_page.skeleton.dart';
 
 import '../../../../config/theams/fonts.dart';
 
@@ -20,107 +24,268 @@ class Page1 extends StatelessWidget {
       children: [
         ColorFiltered(
           colorFilter: backgroundFilter,
-          child: Image.asset(
-            'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg',
+          child:
+              //  Image.network(
+              //   'https://static.vecteezy.com/system/resources/thumbnails/000/600/537/small/BG58-01.jpg',
+              //   fit: BoxFit.cover,
+              // )
+              Image.asset(
+            'lib/data/datasources/local/images/BG58-01.jpg',
             fit: BoxFit.cover,
           ),
         ),
         Column(
           children: [
-            Container(
-              height: 120,
-              width: double.infinity,
-              // decoration: const BoxDecoration(
-              //     color: Colors.amber,
-              //     image: DecorationImage(
-              //         fit: BoxFit.cover,
-              //         image: AssetImage(
-              //             "lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg"))),
+            SafeArea(
+              child: Container(
+                  height: 120,
+                  color: black,
+                  width: double.infinity,
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('daily_quotes')
+                          .orderBy("time", descending: true)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return DailyQuotesSkeleton(); // Loading indicator
+                        }
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            final document = snapshot.data!.docs[index];
+                            final data =
+                                document.data() as Map<String, dynamic>;
+                            return Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 25, 2, 20),
+                                  child: Container(
+                                    height: double.infinity,
+                                    width: 80,
+                                    // color: Colors.amber,
+                                    child: StreamBuilder<QuerySnapshot>(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('daily_quotes')
+                                            .doc(data['user_id'])
+                                            .collection('views')
+                                            .where('user_id',
+                                                isEqualTo: FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                            .snapshots(),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return Expanded(
+                                                child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  color:
+                                                      white, // Set the border color
+                                                  width:
+                                                      2, // Set the border width
+                                                ),
+                                              ),
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  await Provider.of<
+                                                              AddDailyQuotesProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .checkView(
+                                                          data['user_id']);
+                                                  // ignore: use_build_context_synchronously
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ViewDailyQuotes(
+                                                                data: data),
+                                                      ));
+                                                },
+                                                child: CircleAvatar(
+                                                  backgroundColor: black,
+                                                  backgroundImage: NetworkImage(
+                                                      data[
+                                                          'user_profile_image']),
+                                                ),
+                                              ),
+                                            ));
+                                          }
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Expanded(
+                                                child: Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  color:
+                                                      white, // Set the border color
+                                                  width:
+                                                      2, // Set the border width
+                                                ),
+                                              ),
+                                              child: GestureDetector(
+                                                onTap: () async {
+                                                  await Provider.of<
+                                                              AddDailyQuotesProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .checkView(
+                                                          data['user_id']);
+                                                  // ignore: use_build_context_synchronously
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ViewDailyQuotes(
+                                                                data: data),
+                                                      ));
+                                                },
+                                                child: CircleAvatar(
+                                                  backgroundColor: black,
+                                                  backgroundImage: NetworkImage(
+                                                      data[
+                                                          'user_profile_image']),
+                                                ),
+                                              ),
+                                            ));
+                                          }
+
+                                          final length =
+                                              snapshot.data!.docs.length;
+                                          Color? color;
+                                          if (length == 0) {
+                                            color = Colors.white;
+                                          } else {
+                                            color = Colors.grey.shade700;
+                                          }
+                                          return Expanded(
+                                              child: Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color:
+                                                    color, // Set the border color
+                                                width:
+                                                    2, // Set the border width
+                                              ),
+                                            ),
+                                            child: GestureDetector(
+                                              onTap: () async {
+                                                await Provider.of<
+                                                            AddDailyQuotesProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .checkView(data['user_id']);
+                                                // ignore: use_build_context_synchronously
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ViewDailyQuotes(
+                                                              data: data),
+                                                    ));
+                                              },
+                                              child: CircleAvatar(
+                                                backgroundColor: black,
+                                                backgroundImage: NetworkImage(
+                                                    data['user_profile_image']),
+                                              ),
+                                            ),
+                                          ));
+                                        }),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      })),
             ),
             const HomeBar(
               index: 0,
             ),
             // ElevatedButton(onPressed: () {}, child: Text('logout')),
             Expanded(
-              child: Container(
-                // decoration: BoxDecoration(
-                //     image: DecorationImage(
-                //         fit: BoxFit.cover,
-                //         image: AssetImage(
-                //             "lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg"))),
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('poems')
-                        .snapshots(),
-                    builder: (context, snapshot1) {
-                      if (snapshot1.hasError) {
-                        return Text('Error: ${snapshot1.error}');
-                      }
-                      if (snapshot1.connectionState ==
-                          ConnectionState.waiting) {
-                        return CircularProgressIndicator(); // Loading indicator
-                      }
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('poems')
+                      .snapshots(),
+                  builder: (context, snapshot1) {
+                    if (snapshot1.hasError) {
+                      return Text('Error: ${snapshot1.error}');
+                    }
+                    if (snapshot1.connectionState == ConnectionState.waiting) {
+                      return HomPageSkeleton(); // Loading indicator
+                    }
 
-                      // Process data from collection1
-                      final data1 = snapshot1.data!.docs;
+                    // Process data from collection1
+                    final data1 = snapshot1.data!.docs;
 
-                      return StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('short_stories')
-                            .snapshots(),
-                        builder: (context, snapshot2) {
-                          if (snapshot2.hasError) {
-                            return Text('Error: ${snapshot2.error}');
-                          }
-                          if (snapshot2.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator(); // Loading indicator
-                          }
+                    return StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('short_stories')
+                          .snapshots(),
+                      builder: (context, snapshot2) {
+                        if (snapshot2.hasError) {
+                          return Text('Error: ${snapshot2.error}');
+                        }
+                        if (snapshot2.connectionState ==
+                            ConnectionState.waiting) {
+                          return HomPageSkeleton(); // Loading indicator
+                        }
 
-                          // Process data from collection2
-                          final data2 = snapshot2.data!.docs;
+                        // Process data from collection2
+                        final data2 = snapshot2.data!.docs;
 
-                          // Combine and sort the data based on the timestamp field
-                          final combinedData = [...data1, ...data2];
-                          combinedData.sort((a, b) {
-                            final timestampA = a['time'] as Timestamp;
-                            final timestampB = b['time'] as Timestamp;
-                            return timestampA.compareTo(timestampB);
-                          });
+                        // Combine and sort the data based on the timestamp field
+                        final combinedData = [...data1, ...data2];
+                        combinedData.sort((a, b) {
+                          final timestampA = a['time'] as Timestamp;
+                          final timestampB = b['time'] as Timestamp;
+                          return timestampA.compareTo(timestampB);
+                        });
 
-                          //  final  combinedData.reversed;
+                        //  final  combinedData.reversed;
 
-                          // Now, you have sorted data in `combinedData`
-                          // You can build your UI using this data
-                          return ListView.builder(
-                            itemCount: combinedData.length,
-                            itemBuilder: (context, index) {
-                              final document = combinedData[index];
-                              final data =
-                                  document.data() as Map<String, dynamic>;
-                              // Build UI based on the document
-                              final time = document['time'].toDate();
-                              DateTime itemTime = data['time'].toDate();
-                              DateTime currentDateTime = DateTime.now();
-                              Duration difference =
-                                  currentDateTime.difference(itemTime);
-                              String timeDifference =
-                                  Provider.of<AddPoemProvider>(context,
-                                          listen: false)
-                                      .poemTimeDifference(difference);
-                              return data['type'] == 'poem'
-                                  ? PoemCard(data: data)
-                                  : ShortStoryCard(
-                                      data: data,
-                                      time: timeDifference,
-                                    );
-                            },
-                          );
-                        },
-                      );
-                    }),
-              ),
+                        // Now, you have sorted data in `combinedData`
+                        // You can build your UI using this data
+                        return ListView.builder(
+                          itemCount: combinedData.length,
+                          itemBuilder: (context, index) {
+                            final document = combinedData[index];
+                            final data =
+                                document.data() as Map<String, dynamic>;
+                            // Build UI based on the document
+                            final time = document['time'].toDate();
+                            DateTime itemTime = data['time'].toDate();
+                            DateTime currentDateTime = DateTime.now();
+                            Duration difference =
+                                currentDateTime.difference(itemTime);
+                            String timeDifference =
+                                Provider.of<AddPoemProvider>(context,
+                                        listen: false)
+                                    .poemTimeDifference(difference);
+                            return data['type'] == 'poem'
+                                ? PoemCard(data: data)
+                                : ShortStoryCard(
+                                    data: data,
+                                    time: timeDifference,
+                                  );
+                          },
+                        );
+                      },
+                    );
+                  }),
             ),
+
             // ElevatedButton(
             //     onPressed: () async {
             //       await GoogleSignIn().signOut();
@@ -146,7 +311,6 @@ class PoemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: Colors.amber,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
         child: Column(

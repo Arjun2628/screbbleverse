@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:scribbleverse/presentation/widgets/skeleton_widgets/profile/connections_count.dart';
 
 class FollowButton extends StatelessWidget {
   const FollowButton({
@@ -68,11 +69,13 @@ class FollowersFollowingCount extends StatelessWidget {
         builder: (context, follow) {
           if (!follow.hasData) {
             return Center(
-                child:
-                    CircularProgressIndicator()); // Show a loading indicator.
+                child: connectionCountSkelton()); // Show a loading indicator.
           }
           if (follow.hasError) {
             return Text('Error: ${follow.error}');
+          }
+          if (follow.connectionState == ConnectionState.waiting) {
+            return connectionCountSkelton();
           }
           final length = follow.data!.docs.length;
           return Text(
@@ -105,7 +108,7 @@ class PoemCount extends StatelessWidget {
             return Text('Error: ${snapshot1.error}');
           }
           if (snapshot1.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Loading indicator
+            return const connectionCountSkelton(); // Loading indicator
           }
 
           // Process data from collection1
@@ -121,7 +124,7 @@ class PoemCount extends StatelessWidget {
                   return Text('Error: ${snapshot2.error}');
                 }
                 if (snapshot2.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // Loading indicator
+                  return connectionCountSkelton(); // Loading indicator
                 }
 
                 // Process data from collection2

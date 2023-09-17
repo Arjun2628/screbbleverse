@@ -1,20 +1,17 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_font_picker/flutter_font_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
-import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/models/user_moder.dart';
 import 'package:uuid/uuid.dart';
 
-class AddPoemProvider extends ChangeNotifier {
+class AddDailyQuotesProvider extends ChangeNotifier {
   TextEditingController addPoemController = TextEditingController();
   TextEditingController addPoemHeadController = TextEditingController();
   TextEditingController addPoemFinalController = TextEditingController();
@@ -199,73 +196,73 @@ class AddPoemProvider extends ChangeNotifier {
     return snapshot.docs.length;
   }
 
-  void colorArea(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Select Area'),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    openColorPicker(context, 'heading');
-                    // Navigator.pop(context);
-                  },
-                  child: const Text('Heading')),
-              ElevatedButton(
-                  onPressed: () {
-                    openColorPicker(context, 'content');
-                    // Navigator.pop(context);
-                  },
-                  child: const Text('Content'))
-            ],
-          );
-        });
-    notifyListeners();
-  }
+  // void colorArea(BuildContext context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return AlertDialog(
+  //           title: const Text('Select Area'),
+  //           actions: [
+  //             ElevatedButton(
+  //                 onPressed: () {
+  //                   openColorPicker(context, 'heading');
+  //                   // Navigator.pop(context);
+  //                 },
+  //                 child: const Text('Heading')),
+  //             ElevatedButton(
+  //                 onPressed: () {
+  //                   openColorPicker(context, 'content');
+  //                   // Navigator.pop(context);
+  //                 },
+  //                 child: const Text('Content'))
+  //           ],
+  //         );
+  //       });
+  //   notifyListeners();
+  // }
 
-  void openColorPicker(BuildContext context, String area) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Pick a color'),
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: area == 'heading' ? headingColor : contentColor,
-              onColorChanged: (color) {
-                if (area == 'heading') {
-                  headingColor = color;
-                  selectedFontTextStyleHeading = styleFont!.copyWith(
-                    color: headingColor,
-                  );
-                  notifyListeners();
-                } else {
-                  contentColor = color;
-                  selectedFontTextStyle = styleFont!.copyWith(
-                    color: contentColor,
-                  );
+  //  void openColorPicker(BuildContext context, String area) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('Pick a color'),
+  //         content: SingleChildScrollView(
+  //           child: ColorPicker(
+  //             pickerColor: area == 'heading' ? headingColor : contentColor,
+  //             onColorChanged: (color) {
+  //               if (area == 'heading') {
+  //                 headingColor = color;
+  //                 selectedFontTextStyleHeading = styleFont!.copyWith(
+  //                   color: headingColor,
+  //                 );
+  //                 notifyListeners();
+  //               } else {
+  //                 contentColor = color;
+  //                 selectedFontTextStyle = styleFont!.copyWith(
+  //                   color: contentColor,
+  //                 );
 
-                  notifyListeners();
-                }
-              },
-              pickerAreaHeightPercent: 0.8,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-    notifyListeners();
-  }
+  //                 notifyListeners();
+  //               }
+  //             },
+  //             pickerAreaHeightPercent: 0.8,
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text('OK'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  //   notifyListeners();
+  // }
 
   Future<void> pickFont(BuildContext context, String area) async {
     showDialog(
@@ -275,7 +272,7 @@ class AddPoemProvider extends ChangeNotifier {
           content: SingleChildScrollView(
             child: SizedBox(
               width: double.maxFinite,
-              child: Consumer<AddPoemProvider>(
+              child: Consumer<AddDailyQuotesProvider>(
                 builder: (context, value, child) => area == 'content'
                     ? FontPicker(
                         showInDialog: true,
@@ -664,62 +661,6 @@ class AddPoemProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  likeCount(Map<String, dynamic> data) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    Map<String, dynamic> count = {'user_id': auth.currentUser!.uid};
-    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-        .instance
-        .collection('poems')
-        .doc(data['poem_id'])
-        .collection('likes')
-        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    int length = snapshot.docs.length;
-    if (length == 0) {
-      await FirebaseFirestore.instance
-          .collection('poems')
-          .doc(data['poem_id'])
-          .collection('likes')
-          .doc(auth.currentUser!.uid)
-          .set(count);
-    } else {
-      await FirebaseFirestore.instance
-          .collection('poems')
-          .doc(data['poem_id'])
-          .collection('likes')
-          .doc(auth.currentUser!.uid)
-          .delete();
-    }
-  }
-
-  checkLikes(String uid) async {
-    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-        .instance
-        .collection('poems')
-        .doc(uid)
-        .collection('likes')
-        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    if (snapshot.docs.length == 0) {
-      Map<String, dynamic> data = {
-        "user_id": FirebaseAuth.instance.currentUser!.uid
-      };
-      await FirebaseFirestore.instance
-          .collection('poems')
-          .doc(uid)
-          .collection('likes')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .set(data);
-    } else {
-      await FirebaseFirestore.instance
-          .collection('poems')
-          .doc(uid)
-          .collection('likes')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .delete();
-    }
-  }
-
   String poemTimeDifference(Duration duration) {
     if (duration.inHours < 1) {
       // Within 1 hour, show minutes
@@ -736,7 +677,7 @@ class AddPoemProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> addPoem(UserModel? user) async {
+  Future<void> addDailyQuotes(UserModel? user) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     if (templateIndex == 4) {
       if (photo != null) {
@@ -748,35 +689,28 @@ class AddPoemProvider extends ChangeNotifier {
     String colorHeading = colorToString(headingColor);
     String colorContent = colorToString(contentColor);
     Map<String, dynamic> data = {
-      'heading': addPoemHeadController.text,
       'content': addPoemController.text,
-      'heading_fontsize': fontSizeCountHead,
       'content_fontsize': fontSizeCount,
-      'heading_fontfamily': currentFontHeading,
       'content_fontfamily': currentFont,
-      'heading_bold': headingBold,
       'content_bold': bold,
-      'heading_italic': headingItalic,
       'content_italic': italic,
-      'heading_underline': headingUnderline,
       'content_underline': underline,
-      'heading_color': colorHeading,
       'content_color': colorContent,
-      'heading_alignment': textAlignHead.toString(),
       'content_alignment': textAlign.toString(),
       'background_opacity': sliderValue,
       'template_index': templateIndex,
       'background_image': imageUri,
-      'caption': captionController.text,
       'time': poemAddingTime,
       'user_profile_image': user!.profileImage,
       'user_name': user.userName,
       'user_about': user.about,
       'user_id': auth.currentUser!.uid,
-      'poem_id': uuid,
-      'type': 'poem'
+      'quote_id': uuid,
     };
-    await FirebaseFirestore.instance.collection('poems').doc(uuid).set(data);
+    await FirebaseFirestore.instance
+        .collection('daily_quotes')
+        .doc(auth.currentUser!.uid)
+        .set(data);
     await poemReset();
 
     // await FirebaseFirestore.instance
@@ -816,5 +750,54 @@ class AddPoemProvider extends ChangeNotifier {
     textAlignHead = TextAlign.center;
     currentFont = 'Lato-Regular';
     currentFontHeading = 'Lato-Regular';
+  }
+
+  checkView(String uid) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('daily_quotes')
+        .doc(uid)
+        .collection('views')
+        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    if (snapshot.docs.length == 0) {
+      Map<String, dynamic> data = {
+        "user_id": FirebaseAuth.instance.currentUser!.uid
+      };
+      await FirebaseFirestore.instance
+          .collection('daily_quotes')
+          .doc(uid)
+          .collection('views')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set(data);
+    }
+  }
+
+  checkLikes(String uid) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('daily_quotes')
+        .doc(uid)
+        .collection('likes')
+        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    if (snapshot.docs.length == 0) {
+      Map<String, dynamic> data = {
+        "user_id": FirebaseAuth.instance.currentUser!.uid
+      };
+      await FirebaseFirestore.instance
+          .collection('daily_quotes')
+          .doc(uid)
+          .collection('likes')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set(data);
+    } else {
+      await FirebaseFirestore.instance
+          .collection('daily_quotes')
+          .doc(uid)
+          .collection('likes')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .delete();
+    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:scribbleverse/config/router/routes.dart';
 import 'package:scribbleverse/domain/provider/authentication/login.dart';
 import 'package:scribbleverse/domain/provider/authentication/sign_up_with_google.dart';
 import 'package:scribbleverse/domain/provider/books/screens/add_book_provider.dart';
+import 'package:scribbleverse/domain/provider/daily_quotes/daily_quotes_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/comments_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
 import 'package:scribbleverse/domain/provider/poems/writting_provider.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ReadShortStoriesProvider()),
         ChangeNotifierProvider(create: (context) => AddBooksProvider()),
         ChangeNotifierProvider(create: (context) => UserSearchProvider()),
+        ChangeNotifierProvider(create: (context) => AddDailyQuotesProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

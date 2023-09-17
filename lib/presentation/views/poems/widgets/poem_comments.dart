@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/provider/poems/comments_provider.dart';
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../config/theams/colors.dart';
 
@@ -37,7 +38,7 @@ class PostScreen extends StatelessWidget {
           ColorFiltered(
             colorFilter: backgroundFilter,
             child: Image.asset(
-              'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg',
+              'lib/data/datasources/local/images/BG58-01.jpg',
               fit: BoxFit.cover,
             ),
           ),
@@ -77,29 +78,33 @@ class PostScreen extends StatelessWidget {
                       child: Consumer<PublicProvider>(
                         builder: (context, publicProvider, child) => IconButton(
                             onPressed: () async {
-                              await FirebaseFirestore.instance
-                                  .collection('posts/${post.id}/comments')
-                                  .add({
+                              String uid = Uuid().v1();
+                              Map<String, dynamic> cmt = {
                                 'text': value.commentController.text,
                                 'timestamp': FieldValue.serverTimestamp(),
+                                'uid': uid,
                                 'user_profile':
                                     publicProvider.user!.profileImage
-                              });
+                              };
                               await FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(data['user_id'])
-                                  .collection('notifications')
-                                  .add({
-                                'text': value.commentController.text,
-                                'timestamp': FieldValue.serverTimestamp(),
-                                'type': 'comment',
-                                'userName': Provider.of<PublicProvider>(context,
-                                        listen: false)
-                                    .user!
-                                    .userName,
-                                'user_profile':
-                                    publicProvider.user!.profileImage
-                              });
+                                  .collection('poems/${post.id}/comments')
+                                  .doc(uid)
+                                  .set(cmt);
+                              // await FirebaseFirestore.instance
+                              //     .collection('users')
+                              //     .doc(data['user_id'])
+                              //     .collection('notifications')
+                              //     .add({
+                              //   'text': value.commentController.text,
+                              //   'timestamp': FieldValue.serverTimestamp(),
+                              //   'type': 'comment',
+                              //   'userName': Provider.of<PublicProvider>(context,
+                              //           listen: false)
+                              //       .user!
+                              //       .userName,
+                              //   'user_profile':
+                              //       publicProvider.user!.profileImage
+                              // });
                             },
                             icon: const Icon(
                               Icons.send,
@@ -125,7 +130,7 @@ class PostScreen extends StatelessWidget {
               // Display the comments
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('posts/${post.id}/comments')
+                    .collection('poems/${post.id}/comments')
                     .orderBy('timestamp', descending: true)
                     .snapshots(),
                 builder: (context, snapshot) {
@@ -158,16 +163,20 @@ class PostScreen extends StatelessWidget {
                             ),
                             trailing: TextButton(
                               onPressed: () {
-                                _showReplyDialog(context, commentDoc.id);
+                                _showReplyDialog(context, commentDoc['uid']);
                               },
-                              child: Text('Reply'),
+                              child: Text(
+                                'Reply',
+                                style: buttonText,
+                              ),
                             ),
                           ),
                           // Display replies
                           StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
-                                .collection(
-                                    'posts/${post.id}/comments/${commentDoc.id}/replies')
+                                .collection('poems/${post.id}/replies')
+                                .where("replay_id",
+                                    isEqualTo: commentDoc['uid'])
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
@@ -226,12 +235,12 @@ class PostScreen extends StatelessWidget {
                   if (replyText.isNotEmpty) {
                     // Add the reply to Firestore
                     await FirebaseFirestore.instance
-                        .collection(
-                            'posts/${post.id}/comments/${commentId}/replies')
+                        .collection('poems/${post.id}/replies')
                         .add({
                       'text': replyText,
                       'timestamp': FieldValue.serverTimestamp(),
-                      'user_profile': value.user!.profileImage
+                      'user_profile': value.user!.profileImage,
+                      'replay_id': commentId
                     });
                     Navigator.pop(context);
                   }
