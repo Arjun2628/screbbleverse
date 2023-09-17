@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
+import 'package:scribbleverse/domain/provider/public/public_provider.dart';
+import 'package:scribbleverse/presentation/views/daily_quotes/widgets/like_button.dart';
 import 'package:scribbleverse/presentation/views/home/widgets/home_widget.dart';
 import 'package:scribbleverse/presentation/views/short_stories/screens/read_short_stories.dart';
 import 'package:scribbleverse/presentation/views/short_stories/screens/write_short_stories.dart';
@@ -186,7 +188,7 @@ class AllShortStories extends StatelessWidget {
                           ));
                     },
                     child: Container(
-                      height: 160,
+                      height: 170,
                       width: double.infinity,
                       // color: Colors.amber,
                       decoration: const BoxDecoration(
@@ -235,9 +237,32 @@ class AllShortStories extends StatelessWidget {
                                       child: Row(
                                         children: [
                                           Expanded(child: Container()),
-                                          const Padding(
-                                            padding: EdgeInsets.only(right: 15),
-                                            child: Icon(Icons.favorite),
+                                          Padding(
+                                            padding: EdgeInsets.only(right: 5),
+                                            child: Consumer<PublicProvider>(
+                                              builder: (context, user, child) =>
+                                                  IconButton(
+                                                      onPressed: () async {
+                                                        await Provider.of<
+                                                                    ReadShortStoriesProvider>(
+                                                                context,
+                                                                listen: false)
+                                                            .checkShortStoryLikes(
+                                                                data[
+                                                                    'short_story_id'],
+                                                                user.user!);
+                                                      },
+                                                      icon: LikesButton(
+                                                        uid: data[
+                                                            'short_story_id'],
+                                                        baseCollection:
+                                                            "short_stories",
+                                                        icon: Icon(
+                                                          Icons.favorite,
+                                                          color: black,
+                                                        ),
+                                                      )),
+                                            ),
                                           )
                                         ],
                                       ),
@@ -281,6 +306,33 @@ class AllShortStories extends StatelessWidget {
                                                   )
                                                 ],
                                               )),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
+                                            child: GestureDetector(
+                                              onTap: () async {
+                                                await Provider.of<
+                                                            PublicProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .savePosts(data, context);
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    'Save',
+                                                    style: normalBlack,
+                                                  ),
+                                                  Icon(
+                                                    Icons.save_rounded,
+                                                    color: black,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
                                         ],
                                       ),
                                     ),

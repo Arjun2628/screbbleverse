@@ -207,6 +207,10 @@ class ViewDailyQuotes extends StatelessWidget {
                                     icon: LikesButton(
                                       uid: data['user_id'],
                                       baseCollection: "daily_quotes",
+                                      icon: Icon(
+                                        Icons.favorite_border,
+                                        color: white,
+                                      ),
                                     )),
                                 Padding(
                                     padding: const EdgeInsets.only(left: 5),

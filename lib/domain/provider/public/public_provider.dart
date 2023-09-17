@@ -8,6 +8,7 @@ import 'package:scribbleverse/presentation/views/poems/screens/view_poems.dart';
 import 'package:scribbleverse/presentation/views/search/screens/search.dart';
 import 'package:scribbleverse/presentation/views/short_stories/screens/view_short_stories.dart';
 import 'package:scribbleverse/presentation/views/profile/screens/view_profile.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../presentation/views/notifications/notifications.dart';
 
@@ -114,5 +115,21 @@ class PublicProvider extends ChangeNotifier {
     final poemCount = poems.docs.length;
     final shortStoryCount = shortStories.docs.length;
     int count = poemCount + shortStoryCount;
+  }
+
+  savePosts(Map<String, dynamic> data, BuildContext context) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    String uid = Uuid().v1();
+    data.putIfAbsent("saved_id", () => uid);
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('savedPosts')
+        .doc(uid)
+        .set(data);
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Saved to your library')));
   }
 }

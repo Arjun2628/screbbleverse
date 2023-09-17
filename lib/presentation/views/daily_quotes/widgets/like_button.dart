@@ -8,10 +8,12 @@ class LikesButton extends StatelessWidget {
     super.key,
     required this.uid,
     required this.baseCollection,
+    required this.icon,
   });
 
   final String uid;
   final String baseCollection;
+  final Icon icon;
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +26,17 @@ class LikesButton extends StatelessWidget {
             .snapshots(),
         builder: (context, follow) {
           if (!follow.hasData) {
-            return Center(
-                child:
-                    CircularProgressIndicator()); // Show a loading indicator.
+            return icon; // Show a loading indicator.
           }
           if (follow.hasError) {
             return Text('Error: ${follow.error}');
           }
+          if (follow.connectionState == ConnectionState.waiting) {
+            return icon;
+          }
           final length = follow.data!.docs.length;
           if (length == 0) {
-            return Icon(
-              Icons.favorite_border,
-              color: white,
-            );
+            return icon;
           } else {
             return Icon(
               Icons.favorite,

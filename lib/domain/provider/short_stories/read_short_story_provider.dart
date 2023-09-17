@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:scribbleverse/domain/models/user_moder.dart';
 
 import '../../../config/theams/colors.dart';
 import '../../../config/theams/fonts.dart';
@@ -130,5 +133,37 @@ class ReadShortStoriesProvider extends ChangeNotifier {
               );
             }))));
     notifyListeners();
+  }
+
+  checkShortStoryLikes(String uid, UserModel user) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('short_stories')
+        .doc(uid)
+        .collection('likes')
+        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    if (snapshot.docs.length == 0) {
+      DateTime time = DateTime.now();
+      Map<String, dynamic> data = {
+        "user_id": FirebaseAuth.instance.currentUser!.uid,
+        "profile_image": user.profileImage,
+        "userName": user.userName,
+        "timestamp": time
+      };
+      await FirebaseFirestore.instance
+          .collection('short_stories')
+          .doc(uid)
+          .collection('likes')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set(data);
+    } else {
+      await FirebaseFirestore.instance
+          .collection('short_stories')
+          .doc(uid)
+          .collection('likes')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .delete();
+    }
   }
 }

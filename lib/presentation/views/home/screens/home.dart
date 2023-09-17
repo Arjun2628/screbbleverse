@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import 'package:scribbleverse/config/theams/fonts.dart';
 
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/presentation/views/books/screens/add_books.dart';
+import 'package:scribbleverse/presentation/views/profile/screens/saved_posts.dart';
 import 'package:scribbleverse/presentation/views/search/screens/search.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -108,9 +110,14 @@ class HomeScreenState extends State<HomeScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.video_label),
-                title: const Text(' Saved Videos '),
+                title: const Text(' Saved Posts'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewSavedPosts(
+                            uid: FirebaseAuth.instance.currentUser!.uid),
+                      ));
                 },
               ),
               ListTile(

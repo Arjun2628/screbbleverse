@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
+import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/presentation/views/daily_quotes/widgets/like_button.dart';
 import 'package:scribbleverse/presentation/views/poems/screens/writting_screen.dart';
 import 'package:scribbleverse/presentation/views/poems/widgets/comment_count.dart';
@@ -407,10 +408,16 @@ class ViewPoems extends StatelessWidget {
                                                                     .only(
                                                                     top: 10),
                                                             child: LikesButton(
-                                                                uid: data[
-                                                                    'poem_id'],
-                                                                baseCollection:
-                                                                    "poems"),
+                                                              uid: data[
+                                                                  'poem_id'],
+                                                              baseCollection:
+                                                                  "poems",
+                                                              icon: Icon(
+                                                                Icons
+                                                                    .favorite_border,
+                                                                color: white,
+                                                              ),
+                                                            ),
                                                           )
                                                           // const Icon(
                                                           //   Icons.favorite,
@@ -501,19 +508,28 @@ class ViewPoems extends StatelessWidget {
                                             // color: Colors.red,
                                             height: double.infinity,
                                             width: double.infinity,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                const Icon(
-                                                  Icons.save_rounded,
-                                                  color: white,
-                                                ),
-                                                Text(
-                                                  'Save',
-                                                  style: buttonText,
-                                                )
-                                              ],
+                                            child: GestureDetector(
+                                              onTap: () async {
+                                                await Provider.of<
+                                                            PublicProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .savePosts(data, context);
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.save_rounded,
+                                                    color: white,
+                                                  ),
+                                                  Text(
+                                                    'Save',
+                                                    style: buttonText,
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         )
