@@ -5,12 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_font_picker/flutter_font_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
-import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/models/user_moder.dart';
 import 'package:uuid/uuid.dart';
 
@@ -44,7 +44,7 @@ class AddPoemProvider extends ChangeNotifier {
   String image = '';
   String selectedFont = "Roboto";
   TextStyle? selectedFontTextStyle =
-      TextStyle(fontFamily: 'Lato-Regular').copyWith(
+      const TextStyle(fontFamily: 'Lato-Regular').copyWith(
     color: black,
     fontWeight: FontWeight.normal,
     decoration: TextDecoration.none,
@@ -157,7 +157,8 @@ class AddPoemProvider extends ChangeNotifier {
         TextSpan(text: text.substring(0, startSelection)),
         TextSpan(
           text: text.substring(startSelection, endSelection),
-          style: TextStyle(color: Colors.amber), // Apply selected text color
+          style:
+              const TextStyle(color: Colors.amber), // Apply selected text color
         ),
         TextSpan(text: text.substring(endSelection)),
       ],
@@ -700,7 +701,7 @@ class AddPoemProvider extends ChangeNotifier {
         .collection('likes')
         .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
-    if (snapshot.docs.length == 0) {
+    if (snapshot.docs.isEmpty) {
       Map<String, dynamic> data = {
         "user_id": FirebaseAuth.instance.currentUser!.uid
       };
@@ -743,7 +744,7 @@ class AddPoemProvider extends ChangeNotifier {
         await cloudAdd(photo!);
       }
     }
-    String uuid = Uuid().v1();
+    String uuid = const Uuid().v1();
     DateTime poemAddingTime = DateTime.now();
     String colorHeading = colorToString(headingColor);
     String colorContent = colorToString(contentColor);
@@ -787,8 +788,6 @@ class AddPoemProvider extends ChangeNotifier {
     //     .collection('poems')
     //     .doc(uuid)
     //     .set(data);
-
-    print('success');
   }
 
   poemReset() async {
@@ -816,5 +815,14 @@ class AddPoemProvider extends ChangeNotifier {
     textAlignHead = TextAlign.center;
     currentFont = 'Lato-Regular';
     currentFontHeading = 'Lato-Regular';
+  }
+
+  deletePoem(String uid) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('savedPosts')
+        .doc(uid)
+        .delete();
   }
 }

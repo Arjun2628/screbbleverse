@@ -36,6 +36,7 @@ class _MyAppState extends State<MyApp1> with WidgetsBindingObserver {
   }
 
   Brightness get platformBrightness =>
+      // ignore: deprecated_member_use
       MediaQueryData.fromView(WidgetsBinding.instance.window)
           .platformBrightness;
 

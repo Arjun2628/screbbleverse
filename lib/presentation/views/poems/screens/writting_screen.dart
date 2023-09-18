@@ -5,7 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/domain/provider/poems/writting_provider.dart';
 
 class DrawingBoard extends StatefulWidget {
+  const DrawingBoard({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _DrawingBoardState createState() => _DrawingBoardState();
 }
 
@@ -60,6 +63,8 @@ class DrawingPainter extends CustomPainter {
 }
 
 class Writter extends StatelessWidget {
+  const Writter({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -71,9 +76,9 @@ class Writter extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
-            title: Text('Drawing Board'),
+            title: const Text('Drawing Board'),
           ),
-          body: DrawingBoard(),
+          body: const DrawingBoard(),
         ),
       ),
     );

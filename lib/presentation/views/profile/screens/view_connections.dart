@@ -8,7 +8,7 @@ import 'package:scribbleverse/domain/models/user_moder.dart';
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/domain/provider/search/user_search_provider.dart';
 import 'package:scribbleverse/presentation/views/profile/screens/view_other_user_profile.dart';
-import 'package:scribbleverse/presentation/views/search/screens/search.dart';
+
 import 'package:scribbleverse/presentation/views/search/widgets/follow_button.dart';
 
 class ViewFollowers extends StatelessWidget {
@@ -28,12 +28,12 @@ class ViewFollowers extends StatelessWidget {
           ColorFiltered(
             colorFilter: backgroundFilter,
             child: Image.asset(
-              'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg',
+              'lib/data/datasources/local/images/BG58-01.jpg',
               fit: BoxFit.cover,
             ),
           ),
           SafeArea(
-            child: Container(
+            child: SizedBox(
               height: double.infinity,
               width: double.infinity,
               child: StreamBuilder<QuerySnapshot>(
@@ -44,7 +44,7 @@ class ViewFollowers extends StatelessWidget {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(
+                    return const Center(
                         child:
                             CircularProgressIndicator()); // Show a loading indicator.
                   }
@@ -74,7 +74,7 @@ class ViewFollowers extends StatelessWidget {
                             trailing: Consumer<PublicProvider>(
                               builder: (context, user, child) => ElevatedButton(
                                 onPressed: () async {
-                                  Provider.of<UserSearchProvider>(context,
+                                  await Provider.of<UserSearchProvider>(context,
                                           listen: false)
                                       .addFollowes(uid, user.user!);
                                 },
@@ -109,9 +109,10 @@ class ViewFollowers extends StatelessWidget {
 class FollowerWidget extends StatefulWidget {
   final List<QueryDocumentSnapshot> data;
 
-  FollowerWidget(this.data);
+  const FollowerWidget(this.data, {super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ViewFollowerWidgetState createState() => _ViewFollowerWidgetState();
 }
 
@@ -142,7 +143,7 @@ class _ViewFollowerWidgetState extends State<FollowerWidget> {
             filled: true,
             fillColor: white,
             border: OutlineInputBorder(
-                borderSide: BorderSide(width: 1),
+                borderSide: const BorderSide(width: 1),
                 borderRadius: BorderRadius.circular(20)),
           ),
         ),

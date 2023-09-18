@@ -8,7 +8,6 @@ import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/domain/provider/short_stories/read_short_story_provider.dart';
-import 'package:dictionaryx/dictentry.dart';
 
 import '../../../../data/repositories/word_repository.dart';
 
@@ -20,6 +19,7 @@ class ReadShortStories extends StatefulWidget {
 }
 
 class _ReadShortStoriesState extends State<ReadShortStories> {
+  // ignore: prefer_final_fields
   double _scale = 1.0;
   double _previousScale = 1.0;
 
@@ -33,7 +33,7 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
     firstController.text =
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
     int idx = 1;
-    dynamic _controller;
+    dynamic controller;
 
     return Scaffold(
       backgroundColor: black,
@@ -63,14 +63,14 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text("Selected Text"),
-                            content: Text("Your selected text here..."),
+                            title: const Text("Selected Text"),
+                            content: const Text("Your selected text here..."),
                             actions: [
                               TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("Close"),
+                                child: const Text("Close"),
                               ),
                             ],
                           );
@@ -87,20 +87,19 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 25),
                       onTap: () {},
+                      // ignore: deprecated_member_use
                       toolbarOptions:
+                          // ignore: deprecated_member_use
                           const ToolbarOptions(copy: true, selectAll: false),
                       showCursor: true,
                       cursorWidth: 2,
                       onSelectionChanged: (selection, cause) {
                         if (cause == SelectionChangedCause.longPress) {
                           final selectedText = selection.textInside;
-                          _controller.handleSelection(selectedText);
-
-                          print('Selected Text: $selectedText');
-                          print(selection.textInside as String);
+                          controller.handleSelection(selectedText);
                         }
                       },
-                      selectionControls: _controller,
+                      selectionControls: controller,
                       cursorColor: Colors.black,
                       cursorRadius: const Radius.circular(5),
                     ),
@@ -114,11 +113,13 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
   Widget buildPageMain(
     BuildContext context,
   ) {
+    // ignore: no_leading_underscores_for_local_identifiers, prefer_typing_uninitialized_variables
     var _controller;
     Provider.of<ReadShortStoriesProvider>(context, listen: false)
         .setBackSubstring();
     return PageFlipWidget(
       key: _controller,
+      initialIndex: 0,
       children: List.generate(
           Provider.of<ReadShortStoriesProvider>(context, listen: false)
               .pageCount!, (index) {
@@ -128,7 +129,6 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
                 .substring(580 * index, 580 * (index + 1));
         return buildPage(context, _controller, index, subString);
       }),
-      initialIndex: 0,
     );
   }
 
@@ -168,13 +168,12 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
                               color: white, fontFamily: 'Lato-Regular')),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 23),
-                      onTap: () {
-                        print('Tapped');
-                      },
+                      onTap: () {},
                       // contextMenuBuilder: (context, editableTextState) {
                       //   return buildCustomContextMenu(
                       //       context, editableTextState as TextSelection);
                       // },
+                      // ignore: deprecated_member_use
                       toolbarOptions: const ToolbarOptions(
                           copy: true, selectAll: true, cut: true),
                       showCursor: true,
@@ -201,7 +200,7 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
                                             value.meaning!,
                                             style: buttonText,
                                           )
-                                        : Center(
+                                        : const Center(
                                             child: CircularProgressIndicator(
                                             color: white,
                                           ))),
@@ -211,6 +210,7 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
                         }
 
                         String meaning = await lookupWord(word);
+                        // ignore: use_build_context_synchronously
                         Provider.of<PublicProvider>(context, listen: false)
                             .getMeaning(meaning);
                         // ignore: use_build_context_synchronously
@@ -259,19 +259,20 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
           child: Column(
             children: [
               ListTile(
-                title: Text('Copy'),
+                title: const Text('Copy'),
                 onTap: () {
                   // Implement your copy logic here.
                   entry!.remove(); // Close the toolbox.
                 },
               ),
               ListTile(
-                title: Text('Show Meaning'),
+                title: const Text('Show Meaning'),
                 onTap: () async {
                   // Implement your meaning retrieval logic here.
                   String meaning = await lookupWord(selectedWord);
 
                   // Show the meaning in a dialog.
+                  // ignore: use_build_context_synchronously
                   showDialog(
                     context: context,
                     builder: (context) {
@@ -309,22 +310,22 @@ class _ReadShortStoriesState extends State<ReadShortStories> {
       ),
       items: [
         PopupMenuItem(
-          child: Text('Copy Text'),
+          child: const Text('Copy Text'),
           onTap: () {
             // Perform your copy text functionality here
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Text copied!')),
+              const SnackBar(content: Text('Text copied!')),
             );
           },
         ),
         PopupMenuItem(
-          child: Text('Custom Action'),
+          child: const Text('Custom Action'),
           onTap: () {
             // Perform your custom action here
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Custom action performed!')),
+              const SnackBar(content: Text('Custom action performed!')),
             );
           },
         ),
@@ -339,24 +340,24 @@ Widget buildCustomContextMenu(BuildContext context, TextSelection selection) {
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        ListTile(
+        const ListTile(
           title: Text('Selected Text:'),
         ),
         ListTile(
           title: Text(
             selection.textInside as String,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         ListTile(
-          leading: Icon(Icons.copy),
-          title: Text('Copy'),
+          leading: const Icon(Icons.copy),
+          title: const Text('Copy'),
           onTap: () {
             Clipboard.setData(
                 ClipboardData(text: selection.textInside as String));
             Navigator.pop(context); // Close the context menu
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Copied to clipboard')),
+              const SnackBar(content: Text('Copied to clipboard')),
             );
           },
         ),
@@ -366,14 +367,9 @@ Widget buildCustomContextMenu(BuildContext context, TextSelection selection) {
   );
 }
 
+// ignore: unused_element
 void _showWord(Word? word) {
   if (word == null) return;
 
-  print(word);
-
-  for (var d in word.definitions) {
-    print('-- $d');
-  }
-
-  print('');
+  for (var d in word.definitions) {}
 }

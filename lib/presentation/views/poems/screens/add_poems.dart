@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
-import 'package:scribbleverse/domain/provider/public/public_provider.dart';
+
 import 'package:scribbleverse/presentation/views/poems/widgets/poem_template.dart';
 
 class AddPoems extends StatelessWidget {
@@ -119,7 +119,7 @@ class AddPoems extends StatelessWidget {
                                     ))),
                           ),
                           TextSelectionTheme(
-                            data: TextSelectionThemeData(
+                            data: const TextSelectionThemeData(
                               selectionColor: Colors
                                   .green, // Set your desired selection color
                               selectionHandleColor: Colors.green,
@@ -226,8 +226,8 @@ class AddPoems extends StatelessWidget {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(5)),
                                   child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       child: Row(
                                         children: [
                                           Consumer<AddPoemProvider>(
@@ -247,12 +247,13 @@ class AddPoems extends StatelessWidget {
                                                   await value.pickFont(
                                                       context, 'content');
                                                 } else {
-                                                  print(
-                                                      'cursor not in a textField');
+                                                  // print(
+                                                  //     'cursor not in a textField');
                                                 }
                                                 // value.pickFont(context,);
                                               },
-                                              icon: Icon(Icons.arrow_drop_down))
+                                              icon: const Icon(
+                                                  Icons.arrow_drop_down))
                                         ],
                                       )
                                       //  ListTile(
@@ -420,8 +421,9 @@ class AddPoems extends StatelessWidget {
                                                                 width: double
                                                                     .infinity,
                                                                 color: white,
-                                                                child: Icon(Icons
-                                                                    .arrow_drop_down),
+                                                                child: const Icon(
+                                                                    Icons
+                                                                        .arrow_drop_down),
                                                               ),
                                                             )),
                                                       ],
@@ -630,7 +632,10 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
 }
 
 class ProgressBarDemo extends StatefulWidget {
+  const ProgressBarDemo({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _ProgressBarDemoState createState() => _ProgressBarDemoState();
 }
 
@@ -640,7 +645,7 @@ class _ProgressBarDemoState extends State<ProgressBarDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Movable Linear Progress Bar')),
+      appBar: AppBar(title: const Text('Movable Linear Progress Bar')),
       body: Center(
         child: GestureDetector(
           onPanUpdate: (details) {

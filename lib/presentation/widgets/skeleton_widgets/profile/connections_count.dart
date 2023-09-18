@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 
+// ignore: camel_case_types
 class connectionCountSkelton extends StatelessWidget {
   const connectionCountSkelton({super.key});
 
@@ -10,6 +11,5 @@ class connectionCountSkelton extends StatelessWidget {
       '0',
       style: normal,
     );
-    ;
   }
 }

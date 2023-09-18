@@ -21,7 +21,7 @@ dynamic buttonTextDark = GoogleFonts.literata(
   color: const Color.fromRGBO(46, 28, 28, 100),
 );
 dynamic buttonTextBlack = GoogleFonts.literata(
-    color: Color.fromARGB(156, 0, 0, 0), fontWeight: FontWeight.bold);
+    color: const Color.fromARGB(156, 0, 0, 0), fontWeight: FontWeight.bold);
 dynamic normal = GoogleFonts.inter(
   color: Colors.white,
 );

@@ -185,7 +185,8 @@ class FormArea extends StatelessWidget {
                               listen: false)
                           .googleSignUp();
                       // ignore: use_build_context_synchronously
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushNamed(context, '/add_profile');
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => ,))
                     },
                     child: const CircleAvatar(
                       radius: 25,

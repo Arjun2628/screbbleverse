@@ -6,8 +6,6 @@ import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/provider/poems/poems_provider.dart';
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
-import 'package:scribbleverse/presentation/views/poems/widgets/caption.dart';
-import 'package:scribbleverse/presentation/views/profile/widgets/about.dart';
 
 class PoemRendering extends StatelessWidget {
   const PoemRendering({super.key});
@@ -32,6 +30,7 @@ class PoemRendering extends StatelessWidget {
             // ),
             Padding(
               padding: const EdgeInsets.only(right: 25, top: 20),
+              // ignore: sized_box_for_whitespace
               child: Container(
                 height: 40,
                 width: double.infinity,
@@ -52,7 +51,9 @@ class PoemRendering extends StatelessWidget {
                               .addPoem(Provider.of<PublicProvider>(context,
                                       listen: false)
                                   .user);
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
                           // Navigator.popUntil(
                           //     context, (route) => routName == '/view_poems');
@@ -149,6 +150,7 @@ class PoemRendering extends StatelessWidget {
                                                     ))),
                                           ),
                                           TextSelectionTheme(
+                                            // ignore: prefer_const_constructors
                                             data: TextSelectionThemeData(
                                               selectionColor: Colors
                                                   .green, // Set your desired selection color
@@ -197,12 +199,9 @@ class PoemRendering extends StatelessWidget {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(right: 10),
-                                          child: Container(
-                                            // color: Colors.amber,
-                                            child: Text(
-                                              'Read more...',
-                                              style: buttonTextBlack,
-                                            ),
+                                          child: Text(
+                                            'Read more...',
+                                            style: buttonTextBlack,
                                           ),
                                         )
                                       ],

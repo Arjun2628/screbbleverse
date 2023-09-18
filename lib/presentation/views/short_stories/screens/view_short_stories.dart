@@ -4,9 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/presentation/views/daily_quotes/widgets/like_button.dart';
-import 'package:scribbleverse/presentation/views/home/widgets/home_widget.dart';
+
 import 'package:scribbleverse/presentation/views/short_stories/screens/read_short_stories.dart';
 import 'package:scribbleverse/presentation/views/short_stories/screens/write_short_stories.dart';
+import 'package:scribbleverse/presentation/widgets/public_widgets/home_bar.dart';
 
 import '../../../../config/theams/colors.dart';
 import '../../../../domain/provider/short_stories/read_short_story_provider.dart';
@@ -66,8 +67,12 @@ class ViewShortStories extends StatelessWidget {
                                   style: normal,
                                   items: <String>[
                                     'All',
-                                    'Option 2',
-                                    'Option 3',
+                                    'Mystery',
+                                    'Fiction',
+                                    'Fantasy',
+                                    'Romance',
+                                    'Science fiction',
+                                    'Others'
                                   ].map((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
@@ -153,15 +158,37 @@ class AllShortStories extends StatelessWidget {
                   .collection('short_stories')
                   .orderBy('time', descending: true)
                   .snapshots()
-              : value.sorting_content == 'Option 2'
+              : value.sorting_content == 'Mystery'
                   ? FirebaseFirestore.instance
                       .collection('short_stories')
-                      .where('content_type', isEqualTo: 'Option 2')
+                      .where('content_type', isEqualTo: 'Mystery')
                       .snapshots()
-                  : FirebaseFirestore.instance
-                      .collection('short_stories')
-                      .where('content_type', isEqualTo: 'Option 3')
-                      .snapshots(),
+                  : value.sorting_content == 'Fiction'
+                      ? FirebaseFirestore.instance
+                          .collection('short_stories')
+                          .where('content_type', isEqualTo: 'Fiction')
+                          .snapshots()
+                      : value.sorting_content == 'Fantasy'
+                          ? FirebaseFirestore.instance
+                              .collection('short_stories')
+                              .where('content_type', isEqualTo: 'Fantasy')
+                              .snapshots()
+                          : value.sorting_content == 'Romance'
+                              ? FirebaseFirestore.instance
+                                  .collection('short_stories')
+                                  .where('content_type', isEqualTo: 'Romance')
+                                  .snapshots()
+                              : value.sorting_content == 'Science fiction'
+                                  ? FirebaseFirestore.instance
+                                      .collection('short_stories')
+                                      .where('content_type',
+                                          isEqualTo: 'Science fiction')
+                                      .snapshots()
+                                  : FirebaseFirestore.instance
+                                      .collection('short_stories')
+                                      .where('content_type',
+                                          isEqualTo: 'Others')
+                                      .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -238,7 +265,8 @@ class AllShortStories extends StatelessWidget {
                                         children: [
                                           Expanded(child: Container()),
                                           Padding(
-                                            padding: EdgeInsets.only(right: 5),
+                                            padding:
+                                                const EdgeInsets.only(right: 5),
                                             child: Consumer<PublicProvider>(
                                               builder: (context, user, child) =>
                                                   IconButton(
@@ -257,7 +285,7 @@ class AllShortStories extends StatelessWidget {
                                                             'short_story_id'],
                                                         baseCollection:
                                                             "short_stories",
-                                                        icon: Icon(
+                                                        icon: const Icon(
                                                           Icons.favorite,
                                                           color: black,
                                                         ),
@@ -325,7 +353,7 @@ class AllShortStories extends StatelessWidget {
                                                     'Save',
                                                     style: normalBlack,
                                                   ),
-                                                  Icon(
+                                                  const Icon(
                                                     Icons.save_rounded,
                                                     color: black,
                                                   )

@@ -36,7 +36,7 @@ class UserSearchProvider extends ChangeNotifier {
         .collection('followers')
         .where("uid", isEqualTo: auth.currentUser!.uid)
         .get();
-    if (snapshot.docs.length == 0) {
+    if (snapshot.docs.isEmpty) {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(uid)

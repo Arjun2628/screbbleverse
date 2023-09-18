@@ -21,6 +21,7 @@ Widget build(BuildContext context) => Scaffold(
         title: EpubViewActualChapter(
             controller: _epubController,
             builder: (chapterValue) => Text(
+                  // ignore: prefer_interpolation_to_compose_strings
                   'Chapter: ' +
                       (chapterValue?.chapter?.Title
                               ?.replaceAll('\n', '')

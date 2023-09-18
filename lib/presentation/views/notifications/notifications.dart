@@ -43,6 +43,7 @@ class Page4 extends StatelessWidget {
   // }
 }
 
+// ignore: use_key_in_widget_constructors
 class NotificationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -55,8 +56,8 @@ class NotificationWidget extends StatelessWidget {
           child: SafeArea(
             child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 5),
+                const Padding(
+                  padding: EdgeInsets.only(left: 5),
                   child: Icon(
                     Icons.arrow_back,
                     color: white,
@@ -69,8 +70,8 @@ class NotificationWidget extends StatelessWidget {
                     style: buttontextProfile,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5),
+                const Padding(
+                  padding: EdgeInsets.only(left: 5),
                   child: Icon(
                     Icons.notifications_active_rounded,
                     color: white,

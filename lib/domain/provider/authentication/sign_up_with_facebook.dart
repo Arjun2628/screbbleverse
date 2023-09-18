@@ -13,7 +13,7 @@ class SignUpWithFacebookProvider extends ChangeNotifier {
       final userDetails = await FacebookAuth.instance.getUserData();
       userData = userDetails;
     } else {
-      print(loginResult.message);
+      // print(loginResult.message);
     }
 
     final OAuthCredential oAuthCredential =

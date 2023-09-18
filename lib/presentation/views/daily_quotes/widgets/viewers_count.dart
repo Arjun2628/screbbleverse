@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
 class ViewersCount extends StatelessWidget {
@@ -22,7 +22,7 @@ class ViewersCount extends StatelessWidget {
             .snapshots(),
         builder: (context, follow) {
           if (!follow.hasData) {
-            return Center(
+            return const Center(
                 child:
                     CircularProgressIndicator()); // Show a loading indicator.
           }

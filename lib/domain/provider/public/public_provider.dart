@@ -119,7 +119,7 @@ class PublicProvider extends ChangeNotifier {
 
   savePosts(Map<String, dynamic> data, BuildContext context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    String uid = Uuid().v1();
+    String uid = const Uuid().v1();
     data.putIfAbsent("saved_id", () => uid);
 
     await FirebaseFirestore.instance
@@ -129,7 +129,8 @@ class PublicProvider extends ChangeNotifier {
         .doc(uid)
         .set(data);
 
+    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Saved to your library')));
+        .showSnackBar(const SnackBar(content: Text('Saved to your library')));
   }
 }

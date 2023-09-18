@@ -7,6 +7,7 @@ import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
+import 'package:scribbleverse/presentation/views/authentication/screens/login_screen.dart';
 import 'package:scribbleverse/presentation/views/books/screens/add_books.dart';
 import 'package:scribbleverse/presentation/views/profile/screens/saved_posts.dart';
 import 'package:scribbleverse/presentation/views/search/screens/search.dart';
@@ -35,7 +36,7 @@ class HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(0),
             children: [
               DrawerHeader(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image: AssetImage(
@@ -44,7 +45,7 @@ class HomeScreenState extends State<HomeScreen> {
                     children: [
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           height: double.infinity,
                           width: double.infinity,
                           child: Padding(
@@ -58,7 +59,7 @@ class HomeScreenState extends State<HomeScreen> {
                       ),
                       Flexible(
                         flex: 2,
-                        child: Container(
+                        child: SizedBox(
                           height: double.infinity,
                           width: double.infinity,
                           child: Center(
@@ -85,25 +86,10 @@ class HomeScreenState extends State<HomeScreen> {
                         ),
                       )
                     ],
-                  ) //UserAccountDrawerHeader
-                  ), //DrawerHeader
+                  )),
               ListTile(
                 leading: const Icon(Icons.person),
                 title: const Text(' My Profile '),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.book),
-                title: const Text(' My Course '),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.workspace_premium),
-                title: const Text(' Go Premium '),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -130,8 +116,44 @@ class HomeScreenState extends State<HomeScreen> {
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text('LogOut'),
-                onTap: () {
-                  Navigator.pop(context);
+                onTap: () async {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        backgroundColor: black,
+                        title: Text(
+                          "Do you realy want to logout???",
+                          style: normal,
+                        ),
+                        actions: [
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                'Cancel',
+                                style: normalBlack,
+                              )),
+                          ElevatedButton(
+                              onPressed: () async {
+                                await FirebaseAuth.instance.signOut();
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginScreen(),
+                                    ),
+                                    (route) => false);
+                              },
+                              child: Text(
+                                'Logout',
+                                style: normalBlack,
+                              ))
+                        ],
+                      );
+                    },
+                  );
                 },
               ),
             ],
@@ -154,19 +176,7 @@ class BottomBar extends StatelessWidget {
       builder: (context, value, child) => BottomNavigationBar(
           showSelectedLabels: false,
           onTap: (index) async {
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => const AddBooks(),
-            //     ));
-
             value.pageSelection(index);
-
-            // Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => SearchUsers(),
-            //       ));
           },
           items: const [
             BottomNavigationBarItem(
@@ -187,50 +197,6 @@ class BottomBar extends StatelessWidget {
               label: 'Page 4',
             ),
           ]),
-    );
-  }
-}
-
-class Page5 extends StatelessWidget {
-  const Page5({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Page 3'),
-    );
-  }
-}
-
-class One extends StatelessWidget {
-  const One({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('One'),
-    );
-  }
-}
-
-class Two extends StatelessWidget {
-  const Two({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Two'),
-    );
-  }
-}
-
-class Three extends StatelessWidget {
-  const Three({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Three'),
     );
   }
 }

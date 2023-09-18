@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:scribbleverse/config/theams/colors.dart';
 
 class LikesButton extends StatelessWidget {
   const LikesButton({
@@ -38,7 +37,7 @@ class LikesButton extends StatelessWidget {
           if (length == 0) {
             return icon;
           } else {
-            return Icon(
+            return const Icon(
               Icons.favorite,
               color: Colors.red,
             );

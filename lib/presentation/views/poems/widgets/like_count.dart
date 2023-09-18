@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:scribbleverse/presentation/widgets/skeleton_widgets/profile/connections_count.dart';
 
@@ -23,14 +23,14 @@ class PoemLikeCount extends StatelessWidget {
             .snapshots(),
         builder: (context, follow) {
           if (!follow.hasData) {
-            return Center(
+            return const Center(
                 child: connectionCountSkelton()); // Show a loading indicator.
           }
           if (follow.hasError) {
             return Text('Error: ${follow.error}');
           }
           if (follow.connectionState == ConnectionState.waiting) {
-            return connectionCountSkelton();
+            return const connectionCountSkelton();
           }
           final length = follow.data!.docs.length;
           return Text(

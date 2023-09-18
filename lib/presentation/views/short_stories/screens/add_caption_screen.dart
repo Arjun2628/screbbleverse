@@ -30,7 +30,7 @@ class AddCaptionShortStory extends StatelessWidget {
           ),
           ListView(
             children: [
-              AddCover(tittle: 'Add cover'),
+              const AddCover(tittle: 'Add cover'),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Column(
@@ -63,9 +63,12 @@ class AddCaptionShortStory extends StatelessWidget {
                                   value: read.contentType,
                                   style: buttonTextBlack, // Default value
                                   items: <String>[
-                                    'Content type',
-                                    'Option 2',
-                                    'Option 3',
+                                    'Mystery',
+                                    'Fiction',
+                                    'Fantasy',
+                                    'Romance',
+                                    'Science fiction',
+                                    'Others'
                                   ].map((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
@@ -114,7 +117,7 @@ class AddCaptionShortStory extends StatelessWidget {
                             child: Expanded(
                                 child: TextField(
                               controller: value.shortStoryNameController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: 'Short story name',
                                   border: InputBorder.none),
                             )),
@@ -153,7 +156,7 @@ class AddCaptionShortStory extends StatelessWidget {
                                 child: TextField(
                               controller: value.shortStoryDiscriptionController,
                               maxLines: 5,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: 'Add discription',
                                   border: InputBorder.none),
                             )),
@@ -166,14 +169,14 @@ class AddCaptionShortStory extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
-                child: Container(
+                child: SizedBox(
                   height: 40,
                   width: double.infinity,
                   child: Row(
                     children: [
                       Flexible(
                         flex: 2,
-                        child: Container(
+                        child: SizedBox(
                           height: double.infinity,
                           width: double.infinity,
                           child: Padding(
@@ -189,7 +192,8 @@ class AddCaptionShortStory extends StatelessWidget {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.arrow_circle_left_outlined),
+                                    const Icon(
+                                        Icons.arrow_circle_left_outlined),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 5),
                                       child: Text(
@@ -204,16 +208,16 @@ class AddCaptionShortStory extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Flexible(
+                      const Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           height: double.infinity,
                           width: double.infinity,
                         ),
                       ),
                       Flexible(
                         flex: 2,
-                        child: Container(
+                        child: SizedBox(
                           height: double.infinity,
                           width: double.infinity,
                           child: Padding(
@@ -237,7 +241,7 @@ class AddCaptionShortStory extends StatelessWidget {
                                       },
                                     );
                                     await value.cloudAdd(value.photo!);
-                                    String uuid = Uuid().v4();
+                                    String uuid = const Uuid().v4();
                                     DateTime date = DateTime.now();
                                     Map<String, dynamic> data = {
                                       'writting': value.controller.text,

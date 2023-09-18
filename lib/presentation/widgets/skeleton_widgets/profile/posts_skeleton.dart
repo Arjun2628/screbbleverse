@@ -6,7 +6,7 @@ class PoestsSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10),
       itemCount: 12,
       itemBuilder: (context, index) {

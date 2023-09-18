@@ -24,7 +24,7 @@ class FollowButton extends StatelessWidget {
             .snapshots(),
         builder: (context, follow) {
           if (!follow.hasData) {
-            return Center(
+            return const Center(
                 child:
                     CircularProgressIndicator()); // Show a loading indicator.
           }
@@ -68,14 +68,14 @@ class FollowersFollowingCount extends StatelessWidget {
             .snapshots(),
         builder: (context, follow) {
           if (!follow.hasData) {
-            return Center(
+            return const Center(
                 child: connectionCountSkelton()); // Show a loading indicator.
           }
           if (follow.hasError) {
             return Text('Error: ${follow.error}');
           }
           if (follow.connectionState == ConnectionState.waiting) {
-            return connectionCountSkelton();
+            return const connectionCountSkelton();
           }
           final length = follow.data!.docs.length;
           return Text(
@@ -124,7 +124,7 @@ class PoemCount extends StatelessWidget {
                   return Text('Error: ${snapshot2.error}');
                 }
                 if (snapshot2.connectionState == ConnectionState.waiting) {
-                  return connectionCountSkelton(); // Loading indicator
+                  return const connectionCountSkelton(); // Loading indicator
                 }
 
                 // Process data from collection2

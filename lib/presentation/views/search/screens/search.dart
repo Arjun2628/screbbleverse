@@ -26,7 +26,7 @@ class SearchUsers extends StatelessWidget {
           ),
         ),
         SafeArea(
-          child: Container(
+          child: SizedBox(
             height: double.infinity,
             width: double.infinity,
             child: StreamBuilder<QuerySnapshot>(
@@ -37,7 +37,7 @@ class SearchUsers extends StatelessWidget {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                       child:
                           CircularProgressIndicator()); // Show a loading indicator.
                 }
@@ -62,9 +62,10 @@ class SearchUsers extends StatelessWidget {
 class YourSearchWidget extends StatefulWidget {
   final List<QueryDocumentSnapshot> data;
 
-  YourSearchWidget(this.data);
+  const YourSearchWidget(this.data, {super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _YourSearchWidgetState createState() => _YourSearchWidgetState();
 }
 
@@ -95,7 +96,7 @@ class _YourSearchWidgetState extends State<YourSearchWidget> {
             filled: true,
             fillColor: white,
             border: OutlineInputBorder(
-                borderSide: BorderSide(width: 1),
+                borderSide: const BorderSide(width: 1),
                 borderRadius: BorderRadius.circular(20)),
           ),
         ),

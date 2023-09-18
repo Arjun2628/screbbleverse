@@ -21,7 +21,7 @@ class LikesCount extends StatelessWidget {
             .snapshots(),
         builder: (context, follow) {
           if (!follow.hasData) {
-            return Center(
+            return const Center(
                 child:
                     CircularProgressIndicator()); // Show a loading indicator.
           }

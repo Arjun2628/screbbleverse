@@ -20,8 +20,8 @@ class SignupScreen extends StatelessWidget {
           image: DecorationImage(
               opacity: 0.9,
               fit: BoxFit.cover,
-              image: AssetImage(
-                  'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg')),
+              image:
+                  AssetImage('lib/data/datasources/local/images/BG58-01.jpg')),
         ),
         child: SafeArea(
             child: ListView(

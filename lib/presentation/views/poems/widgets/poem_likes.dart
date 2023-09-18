@@ -10,9 +10,10 @@ class PostWidget extends StatefulWidget {
   final DocumentSnapshot post;
   final User? currentUser;
 
-  PostWidget({required this.post, required this.currentUser});
+  const PostWidget({super.key, required this.post, required this.currentUser});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PostWidgetState createState() => _PostWidgetState();
 }
 
@@ -38,8 +39,8 @@ class _PostWidgetState extends State<PostWidget> {
         Consumer<PublicProvider>(
           builder: (context, value, child) => IconButton(
             icon: _isLiked
-                ? Icon(Icons.favorite, color: Colors.red)
-                : Icon(
+                ? const Icon(Icons.favorite, color: Colors.red)
+                : const Icon(
                     Icons.favorite_border,
                     color: white,
                   ),
@@ -86,7 +87,9 @@ class _PostWidgetState extends State<PostWidget> {
         'timestamp': FieldValue.serverTimestamp(),
         'type': 'like',
         'userName':
+            // ignore: use_build_context_synchronously
             Provider.of<PublicProvider>(context, listen: false).user!.userName,
+        // ignore: use_build_context_synchronously
         'user_profile': Provider.of<PublicProvider>(context, listen: false)
             .user!
             .profileImage

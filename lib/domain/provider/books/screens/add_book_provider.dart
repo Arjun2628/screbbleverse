@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:archive/archive_io.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -54,14 +53,13 @@ class AddBooksProvider extends ChangeNotifier {
       if (result != null) {
         filePath = result.files.single.path;
         final file = File(result.files.single.path!);
-        print(result.files.single.path!);
 
         await uploadEpubFile(file);
         // await addEpubFile(file.path);
         notifyListeners();
       }
     } catch (e) {
-      print('Error picking file: $e');
+      rethrow;
     }
   }
 
@@ -69,12 +67,12 @@ class AddBooksProvider extends ChangeNotifier {
     try {
       final storage = FirebaseStorage.instance;
 
-      String bookId = Uuid().v1();
+      String bookId = const Uuid().v1();
 
       final Reference storageReference = storage
           .ref()
           .child('epub_files')
-          .child('$bookId'); // Change 'your_file_name' to a unique name
+          .child(bookId); // Change 'your_file_name' to a unique name
 
       final UploadTask uploadTask = storageReference.putFile(file);
 
@@ -115,13 +113,13 @@ class AddBooksProvider extends ChangeNotifier {
         }
       });
     } catch (e) {
-      print('Error uploading ePub file: $e');
+      rethrow;
     }
   }
 
   Future<void> addEpubFile(String filePath) async {
     // Get the file path of the epub file.
-    final String filePath = 'path/to/epub/file.epub';
+    const String filePath = 'path/to/epub/file.epub';
 
     // Create a reference to the Firebase Storage bucket.
     final storageRef = FirebaseStorage.instance.ref('epub_files');
@@ -135,7 +133,6 @@ class AddBooksProvider extends ChangeNotifier {
     // Listen for the completion of the upload task.
     uploadTask.whenComplete(() {
       // The file has been uploaded.
-      print('The file has been uploaded.');
     });
   }
 
@@ -160,13 +157,11 @@ class AddBooksProvider extends ChangeNotifier {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/$fileName');
 
-      final bytes =
-          await Stream.fromIterable(downloadUrl.characters).toString();
+      final bytes = Stream.fromIterable(downloadUrl.characters).toString();
       final book = await file.writeAsString(bytes);
       fileSet(book);
     } catch (e) {
-      print('Error downloading ePub file: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -211,8 +206,7 @@ class AddBooksProvider extends ChangeNotifier {
 
       eSet(bytes);
     } catch (e) {
-      print('Error downloading ePub file: $e');
-      throw e;
+      rethrow;
     }
   }
 }

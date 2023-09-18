@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/provider/books/screens/add_book_provider.dart';
 import 'package:scribbleverse/domain/provider/books/screens/view_books.dart';
-import 'package:scribbleverse/presentation/views/books/screens/add_books.dart';
-import 'package:scribbleverse/presentation/views/home/widgets/home_widget.dart';
 
 import '../../../../config/theams/colors.dart';
 
@@ -28,57 +26,14 @@ class ViewBooks extends StatelessWidget {
           SafeArea(
             child: ListView(
               children: [
-                // Row(
-                //   children: [
-                //     Expanded(child: Container()),
-                //     Padding(
-                //       padding: const EdgeInsets.only(right: 15, top: 15),
-                //       child: GestureDetector(
-                //         onTap: () async {
-                //           Navigator.push(
-                //               context,
-                //               MaterialPageRoute(
-                //                 builder: (context) => AddBooks(),
-                //               ));
-                //         },
-                //         child: Container(
-                //           height: 35,
-                //           width: 90,
-                //           decoration: BoxDecoration(
-                //               borderRadius: BorderRadius.circular(20),
-                //               color: white,
-                //               boxShadow: [
-                //                 BoxShadow(
-                //                   color: Colors.grey
-                //                       .withOpacity(0.2), // Shadow color
-                //                   spreadRadius: 5, // How far the shadow spreads
-                //                   blurRadius: 7, // Soften the shadow
-                //                   offset: const Offset(
-                //                       0, 3), // Offset in x and y directions
-                //                 ),
-                //               ]),
-                //           child: const Padding(
-                //             padding: EdgeInsets.only(left: 7),
-                //             child: Center(
-                //                 child: Text(
-                //               'Done',
-                //               style: TextStyle(fontSize: 17),
-                //             )),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-
-                Container(
+                SizedBox(
                   height: 130,
                   width: double.infinity,
                   child: Row(
                     children: [
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           height: double.infinity,
                           width: double.infinity,
                           child: Center(
@@ -91,7 +46,7 @@ class ViewBooks extends StatelessWidget {
                       ),
                       Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           height: double.infinity,
                           width: double.infinity,
                           // color: Colors.red,
@@ -125,6 +80,7 @@ class ViewBooks extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class BooksCategory extends StatelessWidget {
   BooksCategory({
     super.key,
@@ -138,7 +94,7 @@ class BooksCategory extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 15),
-          child: Container(
+          child: SizedBox(
             height: 30,
             width: double.infinity,
             child: Text(
@@ -149,7 +105,7 @@ class BooksCategory extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 15),
-          child: Container(
+          child: SizedBox(
             height: 130,
             width: double.infinity,
             // color: Colors.lightBlue,
@@ -186,6 +142,7 @@ class BooksCategory extends StatelessWidget {
                                             listen: false)
                                         .getEpubFileFromFirebaseAsUnit8List(
                                             data['book']);
+                                    // ignore: use_build_context_synchronously
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -209,7 +166,7 @@ class BooksCategory extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             )
                           ],
@@ -220,7 +177,7 @@ class BooksCategory extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
       ],

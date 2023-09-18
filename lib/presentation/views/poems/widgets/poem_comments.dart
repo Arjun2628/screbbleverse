@@ -24,7 +24,7 @@ class PoemComments extends StatelessWidget {
 class PostScreen extends StatelessWidget {
   final DocumentSnapshot post;
 
-  PostScreen({required this.post, required this.data});
+  const PostScreen({super.key, required this.post, required this.data});
 
   final Map<String, dynamic> data;
 
@@ -78,7 +78,7 @@ class PostScreen extends StatelessWidget {
                       child: Consumer<PublicProvider>(
                         builder: (context, publicProvider, child) => IconButton(
                             onPressed: () async {
-                              String uid = Uuid().v1();
+                              String uid = const Uuid().v1();
                               Map<String, dynamic> cmt = {
                                 'text': value.commentController.text,
                                 'timestamp': FieldValue.serverTimestamp(),
@@ -135,7 +135,7 @@ class PostScreen extends StatelessWidget {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                   return Column(
                     children: snapshot.data!.docs.map((commentDoc) {
@@ -221,12 +221,12 @@ class PostScreen extends StatelessWidget {
         String replyText = '';
 
         return AlertDialog(
-          title: Text('Reply to Comment'),
+          title: const Text('Reply to Comment'),
           content: TextField(
             onChanged: (value) {
               replyText = value;
             },
-            decoration: InputDecoration(labelText: 'Enter your reply'),
+            decoration: const InputDecoration(labelText: 'Enter your reply'),
           ),
           actions: [
             Consumer<PublicProvider>(
@@ -242,10 +242,11 @@ class PostScreen extends StatelessWidget {
                       'user_profile': value.user!.profileImage,
                       'replay_id': commentId
                     });
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                   }
                 },
-                child: Text('Send'),
+                child: const Text('Send'),
               ),
             ),
           ],

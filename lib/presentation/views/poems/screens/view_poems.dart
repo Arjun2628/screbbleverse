@@ -13,6 +13,7 @@ import 'package:scribbleverse/presentation/views/poems/widgets/comment_count.dar
 import 'package:scribbleverse/presentation/views/poems/widgets/like_count.dart';
 import 'package:scribbleverse/presentation/views/poems/widgets/poem_comments.dart';
 import 'package:scribbleverse/presentation/views/poems/widgets/poem_likes.dart';
+import 'package:scribbleverse/presentation/widgets/public_widgets/home_bar.dart';
 
 import '../../home/widgets/home_widget.dart';
 
@@ -183,34 +184,31 @@ class ViewPoems extends StatelessWidget {
                                               )
                                             ],
                                           ),
-                                          subtitle: Container(
-                                            // color: Colors.amber,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 25),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    "@${data['user_name']}",
-                                                    style: buttonText,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                    timeDifference,
-                                                    style: buttonText,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ],
-                                              ),
+                                          subtitle: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 25),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  "@${data['user_name']}",
+                                                  style: buttonText,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  timeDifference,
+                                                  style: buttonText,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                          trailing: Padding(
-                                            padding: const EdgeInsets.only(
+                                          trailing: const Padding(
+                                            padding: EdgeInsets.only(
                                               bottom: 15,
                                             ),
                                             child: Icon(
@@ -412,7 +410,7 @@ class ViewPoems extends StatelessWidget {
                                                                   'poem_id'],
                                                               baseCollection:
                                                                   "poems",
-                                                              icon: Icon(
+                                                              icon: const Icon(
                                                                 Icons
                                                                     .favorite_border,
                                                                 color: white,

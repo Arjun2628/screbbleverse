@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbleverse/domain/provider/authentication/login.dart';
+import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 
 import '../../../../config/theams/colors.dart';
 import '../../../../config/theams/fonts.dart';
@@ -152,8 +153,12 @@ class LoginFormArea extends StatelessWidget {
                                     // .createUserWithEmailAndPassword(
                                     //     email: value.emailController.text,
                                     //     password: value.passwordController.text)
-                                    .then((value) {
-                                  Navigator.pushNamed(context, '/homes');
+                                    .then((value) async {
+                                  await Provider.of<PublicProvider>(context,
+                                          listen: false)
+                                      .getUserData();
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.pushNamed(context, '/home');
                                 });
                               }
                             },

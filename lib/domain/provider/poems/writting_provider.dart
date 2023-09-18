@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DrawingProvider extends ChangeNotifier {
-  List<Offset> _points = [];
+  final List<Offset> _points = [];
 
   List<Offset> get points => _points;
 

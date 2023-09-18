@@ -24,7 +24,7 @@ class ViewSavedPosts extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: white,
           ),
@@ -45,43 +45,71 @@ class ViewSavedPosts extends StatelessWidget {
             ),
           ),
           SafeArea(
-            child: Container(
+            child: SizedBox(
               height: double.infinity,
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .collection('savedPosts')
-                          .orderBy('time')
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return PoestsSkeleton(); // Loading indicator
-                        }
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .collection('savedPosts')
+                        .orderBy('time')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const PoestsSkeleton(); // Loading indicator
+                      }
 
-                        // Process data from collection1
+                      // Process data from collection1
 
-                        return GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10),
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            final document = snapshot.data!.docs[index];
-                            final data =
-                                document.data() as Map<String, dynamic>;
-                            return data['type'] == 'poem'
-                                ? Stack(
+                      return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final document = snapshot.data!.docs[index];
+                          final data = document.data() as Map<String, dynamic>;
+                          return data['type'] == 'poem'
+                              ? GestureDetector(
+                                  onLongPress: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            "Do you realy want to remove this post from library??",
+                                            style: normalBlack,
+                                          ),
+                                          actions: [
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('cancel')),
+                                            ElevatedButton(
+                                                onPressed: () async {
+                                                  Provider.of<AddPoemProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .deletePoem(
+                                                          data['saved_id']);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('delete')),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Stack(
                                     fit: StackFit.expand,
                                     children: [
                                       Consumer<AddPoemProvider>(
@@ -97,6 +125,7 @@ class ViewSavedPosts extends StatelessWidget {
                                       ),
                                       Consumer<AddPoemProvider>(
                                         builder: (context, value, child) =>
+                                            // ignore: sized_box_for_whitespace
                                             Container(
                                           height: 90,
                                           width: double.infinity,
@@ -108,8 +137,40 @@ class ViewSavedPosts extends StatelessWidget {
                                         style: buttonTextBlack,
                                       ))
                                     ],
-                                  )
-                                : Container(
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onLongPress: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            "Do you realy want to remove this post from library??",
+                                            style: normalBlack,
+                                          ),
+                                          actions: [
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('cancel')),
+                                            ElevatedButton(
+                                                onPressed: () async {
+                                                  Provider.of<AddPoemProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .deletePoem(
+                                                          data['saved_id']);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text('delete')),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
                                     height: 90,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
@@ -117,11 +178,11 @@ class ViewSavedPosts extends StatelessWidget {
                                             fit: BoxFit.cover,
                                             image: NetworkImage(
                                                 data['cover_photo']))),
-                                  );
-                          },
-                        );
-                      }),
-                ),
+                                  ),
+                                );
+                        },
+                      );
+                    }),
               ),
             ),
           ),

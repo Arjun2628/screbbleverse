@@ -14,7 +14,7 @@ class DailyQuotesSkeleton extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 25, 2, 20),
-              child: Container(
+              child: SizedBox(
                 height: double.infinity,
                 width: 80,
 
@@ -23,7 +23,7 @@ class DailyQuotesSkeleton extends StatelessWidget {
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(width: 2, color: Colors.grey)),
-                  child: CircleAvatar(
+                  child: const CircleAvatar(
                     backgroundColor: black,
                   ),
                 ),

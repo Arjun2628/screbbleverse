@@ -28,26 +28,24 @@ class AddDailyQuotes extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                      child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20, top: 10),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Daily quotes',
-                              style: headdingText,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.draw_sharp,
-                              color: white,
-                            )
-                          ],
-                        ),
+                      child: Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Text(
+                            'Daily quotes',
+                            style: headdingText,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          const Icon(
+                            Icons.draw_sharp,
+                            color: white,
+                          )
+                        ],
                       ),
                     ),
                   )),
@@ -60,6 +58,7 @@ class AddDailyQuotes extends StatelessWidget {
                             .addDailyQuotes(Provider.of<PublicProvider>(context,
                                     listen: false)
                                 .user);
+                        // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                       },
                       child: Container(
@@ -102,53 +101,15 @@ class AddDailyQuotes extends StatelessWidget {
                         image: DecorationImage(
                       fit: BoxFit.cover,
                       opacity: addPoem.backgroundOpacity,
-                      image: AssetImage(
+                      image: const AssetImage(
                           "lib/data/datasources/local/images/[removal.ai]_255b6677-8f24-488b-b257-fb567e6e9474-617fa35f9105137354ee05460ae611b7.png"),
-                      //  addPoem.templateIndex == 4
-                      //     ? addPoem.photo != null
-                      //         ? DecorationImage(
-                      //             // opacity: 0.9,
-                      //             opacity: addPoem.backgroundOpacity,
-                      //             fit: BoxFit.cover,
-                      //             image: FileImage(addPoem.photo!),
-                      //           )
-                      //         : DecorationImage(
-                      //             fit: BoxFit.cover,
-                      //             opacity: addPoem.backgroundOpacity,
-                      //             image: AssetImage(addPoem.templateList[0]))
-                      //     : DecorationImage(
-                      //         fit: BoxFit.cover,
-                      //         opacity: addPoem.backgroundOpacity,
-                      //         image: AssetImage(addPoem.template))
                     )),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(75, 85, 65, 65),
                       child: ListView(
                         children: [
-                          // TextField(
-                          //   controller: addPoem.addPoemHeadController,
-                          //   focusNode: addPoem.headingFocusNode,
-                          //   // style: TextStyle(
-                          //   //     fontSize: 20, color: addPoem.headingColor),
-                          //   style: addPoem.selectedFontTextStyleHeading,
-                          //   onTap: () {
-                          //     FocusScope.of(context)
-                          //         .requestFocus(addPoem.headingFocusNode);
-                          //     addPoem.focus('heading');
-                          //   },
-                          //   textAlign: addPoem.textAlignHead,
-                          //   decoration: InputDecoration(
-                          //       suffixIcon: IconButton(
-                          //           onPressed: () {
-                          //             addPoem.colorArea(context);
-                          //           },
-                          //           icon: const Icon(
-                          //             Icons.color_lens,
-                          //             color: Colors.black,
-                          //           ))),
-                          // ),
                           TextSelectionTheme(
-                            data: TextSelectionThemeData(
+                            data: const TextSelectionThemeData(
                               selectionColor: Colors
                                   .green, // Set your desired selection color
                               selectionHandleColor: Colors.green,
@@ -255,8 +216,8 @@ class AddDailyQuotes extends StatelessWidget {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(5)),
                                   child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       child: Row(
                                         children: [
                                           Consumer<AddDailyQuotesProvider>(
@@ -276,21 +237,13 @@ class AddDailyQuotes extends StatelessWidget {
                                                   await value.pickFont(
                                                       context, 'content');
                                                 } else {
-                                                  print(
-                                                      'cursor not in a textField');
+                                                  //snackbar
                                                 }
-                                                // value.pickFont(context,);
                                               },
-                                              icon: Icon(Icons.arrow_drop_down))
+                                              icon: const Icon(
+                                                  Icons.arrow_drop_down))
                                         ],
-                                      )
-                                      //  ListTile(
-                                      //   leading: Text('font family'),
-                                      //   trailing: IconButton(
-                                      //       onPressed: () {},
-                                      //       icon: Icon(Icons.arrow_drop_down)),
-                                      // ),
-                                      ),
+                                      )),
                                 ),
                               ),
                               Row(
@@ -449,8 +402,9 @@ class AddDailyQuotes extends StatelessWidget {
                                                                 width: double
                                                                     .infinity,
                                                                 color: white,
-                                                                child: Icon(Icons
-                                                                    .arrow_drop_down),
+                                                                child: const Icon(
+                                                                    Icons
+                                                                        .arrow_drop_down),
                                                               ),
                                                             )),
                                                       ],

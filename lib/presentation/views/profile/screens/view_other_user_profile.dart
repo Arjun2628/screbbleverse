@@ -1,16 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/models/user_moder.dart';
-import 'package:scribbleverse/domain/provider/profile/add_profile_provider.dart';
+
 import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 import 'package:scribbleverse/domain/provider/search/user_search_provider.dart';
-import 'package:scribbleverse/presentation/views/authentication/screens/login_screen.dart';
+
 import 'package:scribbleverse/presentation/views/profile/screens/view_connections.dart';
-import 'package:scribbleverse/presentation/views/profile/screens/view_profile.dart';
-import 'package:scribbleverse/presentation/views/search/screens/search.dart';
+
+import 'package:scribbleverse/presentation/views/profile/widgets/view_posts.dart';
+
 import 'package:scribbleverse/presentation/views/search/widgets/follow_button.dart';
 
 class ViewOtherProfile extends StatelessWidget {
@@ -33,7 +33,7 @@ class ViewOtherProfile extends StatelessWidget {
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: AssetImage(
-                          'lib/data/datasources/local/images/istockphoto-1353780638-612x612.jpg'))),
+                          'lib/data/datasources/local/images/BG58-01.jpg'))),
               child: SafeArea(
                 child: Column(
                   children: [
@@ -92,18 +92,31 @@ class ViewOtherProfile extends StatelessWidget {
                                             height: double.infinity,
                                             width: double.infinity,
                                             child: Center(
-                                              child: Column(
-                                                children: [
-                                                  FollowersFollowingCount(
-                                                    uid: user.uid!,
-                                                    style: normal,
-                                                    type: "following",
-                                                  ),
-                                                  Text(
-                                                    'Following',
-                                                    style: normal,
-                                                  ),
-                                                ],
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ViewFollowers(
+                                                                uid: user.uid!,
+                                                                colloctionName:
+                                                                    "following"),
+                                                      ));
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    FollowersFollowingCount(
+                                                      uid: user.uid!,
+                                                      style: normal,
+                                                      type: "following",
+                                                    ),
+                                                    Text(
+                                                      'Following',
+                                                      style: normal,
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -270,15 +283,7 @@ class ViewOtherProfile extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(30.0),
                                   child: GestureDetector(
-                                    onTap: () async {
-                                      await FirebaseAuth.instance.signOut();
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => LoginScreen(),
-                                          ),
-                                          (route) => false);
-                                    },
+                                    onTap: () async {},
                                     child: SizedBox(
                                       height: double.infinity,
                                       width: double.infinity,

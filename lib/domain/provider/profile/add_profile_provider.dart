@@ -146,7 +146,7 @@ class AddProfileProvider extends ChangeNotifier {
       }
     } catch (e) {
       // Handle any errors that occur during the process
-      print("Error checking document existence: $e");
+
       return false;
     }
   }

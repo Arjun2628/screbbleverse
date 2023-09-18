@@ -53,6 +53,7 @@ class SubmitButton extends StatelessWidget {
                             if (value.formateDate != 'Month / Day / Year') {
                               if (value.genderName != null) {
                                 if (tittle == 'Add') {
+                                  // ignore: use_build_context_synchronously
                                   showDialog(
                                       context: context,
                                       builder: ((context) {
@@ -78,9 +79,14 @@ class SubmitButton extends StatelessWidget {
                                 };
                                 await value.addProfile(data);
                                 UserModel user = UserModel.fromJson(data);
+                                // ignore: use_build_context_synchronously
                                 await Provider.of<PublicProvider>(context,
                                         listen: false)
                                     .editUser(user);
+                                // ignore: use_build_context_synchronously
+                                await Provider.of<PublicProvider>(context,
+                                        listen: false)
+                                    .getUserData();
                                 // ignore: use_build_context_synchronously
                                 Navigator.pushNamed(context, '/home');
                               } else {}

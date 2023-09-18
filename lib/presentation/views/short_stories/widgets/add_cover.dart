@@ -40,7 +40,7 @@ class AddCover extends StatelessWidget {
                               ? Container(
                                   height: double.infinity,
                                   width: double.infinity,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image: AssetImage(

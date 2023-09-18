@@ -31,7 +31,7 @@ class WordRepository {
               if (definitionsList.isNotEmpty) {
                 final definition = definitionsList[0];
                 // Check if 'definition' is a string
-                print(definition['definition']);
+
                 return definition['definition'];
               }
             }

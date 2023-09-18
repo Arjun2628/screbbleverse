@@ -3,11 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/config/theams/fonts.dart';
 import 'package:scribbleverse/domain/provider/daily_quotes/daily_quotes_provider.dart';
-import 'package:scribbleverse/domain/provider/public/public_provider.dart';
+
 import 'package:scribbleverse/presentation/views/daily_quotes/widgets/like_button.dart';
 import 'package:scribbleverse/presentation/views/daily_quotes/widgets/likes_count.dart';
 import 'package:scribbleverse/presentation/views/daily_quotes/widgets/viewers_count.dart';
-import 'package:scribbleverse/presentation/views/poems/widgets/poem_template.dart';
 
 class ViewDailyQuotes extends StatelessWidget {
   const ViewDailyQuotes({super.key, required this.data});
@@ -29,26 +28,24 @@ class ViewDailyQuotes extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                      child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20, top: 10),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Daily quotes',
-                              style: headdingText,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.draw_sharp,
-                              color: white,
-                            )
-                          ],
-                        ),
+                      child: Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Text(
+                            'Daily quotes',
+                            style: headdingText,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          const Icon(
+                            Icons.draw_sharp,
+                            color: white,
+                          )
+                        ],
                       ),
                     ),
                   )),
@@ -65,7 +62,7 @@ class ViewDailyQuotes extends StatelessWidget {
                         image: DecorationImage(
                       fit: BoxFit.cover,
                       opacity: addPoem.backgroundOpacity,
-                      image: AssetImage(
+                      image: const AssetImage(
                           "lib/data/datasources/local/images/[removal.ai]_255b6677-8f24-488b-b257-fb567e6e9474-617fa35f9105137354ee05460ae611b7.png"),
                       //  addPoem.templateIndex == 4
                       //     ? addPoem.photo != null
@@ -111,7 +108,7 @@ class ViewDailyQuotes extends StatelessWidget {
                           //           ))),
                           // ),
                           TextSelectionTheme(
-                              data: TextSelectionThemeData(
+                              data: const TextSelectionThemeData(
                                 selectionColor: Colors
                                     .green, // Set your desired selection color
                                 selectionHandleColor: Colors.green,
@@ -156,21 +153,21 @@ class ViewDailyQuotes extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 50,
                 width: double.infinity,
                 child: Row(
                   children: [
                     Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           height: double.infinity,
                           width: double.infinity,
                           child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.remove_red_eye_outlined,
                                   color: white,
                                 ),
@@ -190,7 +187,7 @@ class ViewDailyQuotes extends StatelessWidget {
                         )),
                     Flexible(
                         flex: 1,
-                        child: Container(
+                        child: SizedBox(
                           height: double.infinity,
                           width: double.infinity,
                           child: Center(
@@ -207,7 +204,7 @@ class ViewDailyQuotes extends StatelessWidget {
                                     icon: LikesButton(
                                       uid: data['user_id'],
                                       baseCollection: "daily_quotes",
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.favorite_border,
                                         color: white,
                                       ),

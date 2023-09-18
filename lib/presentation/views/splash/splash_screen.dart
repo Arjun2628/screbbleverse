@@ -1,11 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scribbleverse/config/theams/fonts.dart';
-import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 
-import '../authentication/screens/login_screen.dart';
-import '../home/screens/home.dart';
+import 'package:scribbleverse/domain/provider/public/public_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.screen});
@@ -18,7 +14,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<PublicProvider>(context, listen: false).getUserData();
   }
@@ -34,17 +29,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     Future.delayed(
-      Duration(seconds: 3),
+      const Duration(seconds: 3),
       () {
         goToHome();
       },
     );
     return Scaffold(
-      body: Center(
-        child: Text(
-          'Welcome',
-          style: buttonTextBlack,
-        ),
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(
+                    'lib/data/datasources/local/images/BG58-01.jpg'))),
       ),
     );
   }

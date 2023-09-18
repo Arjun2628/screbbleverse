@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:scribbleverse/presentation/widgets/skeleton_widgets/profile/connections_count.dart';
 
 class CommentCount extends StatelessWidget {
   const CommentCount({
@@ -21,9 +22,8 @@ class CommentCount extends StatelessWidget {
             .snapshots(),
         builder: (context, comments) {
           if (!comments.hasData) {
-            return Center(
-                child:
-                    CircularProgressIndicator()); // Show a loading indicator.
+            return const Center(
+                child: connectionCountSkelton()); // Show a loading indicator.
           }
           if (comments.hasError) {
             return Text('Error: ${comments.error}');
@@ -37,9 +37,9 @@ class CommentCount extends StatelessWidget {
                   .snapshots(),
               builder: (context, replies) {
                 if (!replies.hasData) {
-                  return Center(
+                  return const Center(
                       child:
-                          CircularProgressIndicator()); // Show a loading indicator.
+                          connectionCountSkelton()); // Show a loading indicator.
                 }
                 if (replies.hasError) {
                   return Text('Error: ${replies.error}');

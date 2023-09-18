@@ -41,7 +41,7 @@ class AddDailyQuotesProvider extends ChangeNotifier {
   String image = '';
   String selectedFont = "Roboto";
   TextStyle? selectedFontTextStyle =
-      TextStyle(fontFamily: 'Lato-Regular').copyWith(
+      const TextStyle(fontFamily: 'Lato-Regular').copyWith(
     color: black,
     fontWeight: FontWeight.normal,
     decoration: TextDecoration.none,
@@ -154,7 +154,8 @@ class AddDailyQuotesProvider extends ChangeNotifier {
         TextSpan(text: text.substring(0, startSelection)),
         TextSpan(
           text: text.substring(startSelection, endSelection),
-          style: TextStyle(color: Colors.amber), // Apply selected text color
+          style:
+              const TextStyle(color: Colors.amber), // Apply selected text color
         ),
         TextSpan(text: text.substring(endSelection)),
       ],
@@ -684,7 +685,7 @@ class AddDailyQuotesProvider extends ChangeNotifier {
         await cloudAdd(photo!);
       }
     }
-    String uuid = Uuid().v1();
+    String uuid = const Uuid().v1();
     DateTime poemAddingTime = DateTime.now();
     String colorHeading = colorToString(headingColor);
     String colorContent = colorToString(contentColor);
@@ -721,8 +722,6 @@ class AddDailyQuotesProvider extends ChangeNotifier {
     //     .collection('poems')
     //     .doc(uuid)
     //     .set(data);
-
-    print('success');
   }
 
   poemReset() async {
@@ -760,7 +759,7 @@ class AddDailyQuotesProvider extends ChangeNotifier {
         .collection('views')
         .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
-    if (snapshot.docs.length == 0) {
+    if (snapshot.docs.isEmpty) {
       Map<String, dynamic> data = {
         "user_id": FirebaseAuth.instance.currentUser!.uid
       };
@@ -781,7 +780,7 @@ class AddDailyQuotesProvider extends ChangeNotifier {
         .collection('likes')
         .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
-    if (snapshot.docs.length == 0) {
+    if (snapshot.docs.isEmpty) {
       Map<String, dynamic> data = {
         "user_id": FirebaseAuth.instance.currentUser!.uid
       };

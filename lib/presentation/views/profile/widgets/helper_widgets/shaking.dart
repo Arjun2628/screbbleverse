@@ -7,6 +7,7 @@ class ShakingWidget extends StatefulWidget {
   const ShakingWidget({super.key, required this.child});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ShakingWidgetState createState() => _ShakingWidgetState();
 }
 

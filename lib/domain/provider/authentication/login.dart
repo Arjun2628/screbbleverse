@@ -9,11 +9,12 @@ class LoginProvider extends ChangeNotifier {
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
       await auth.sendPasswordResetEmail(email: emailController.text);
+      // ignore: use_build_context_synchronously
       Navigator.pushNamed(context, '/login');
       // Get.snackbar("Send the link", 'Email');
       // loading.value = false;
     } catch (e) {
-      print(e);
+      rethrow;
     }
     notifyListeners();
   }

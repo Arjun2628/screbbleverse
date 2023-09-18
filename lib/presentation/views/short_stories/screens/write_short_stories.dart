@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:scribbleverse/config/theams/colors.dart';
 import 'package:scribbleverse/domain/provider/short_stories/read_short_story_provider.dart';
 import 'package:scribbleverse/presentation/views/short_stories/screens/add_caption_screen.dart';
-import 'package:uuid/uuid.dart';
 
 class WriteShortStories extends StatelessWidget {
   const WriteShortStories({super.key});
@@ -68,10 +67,10 @@ class WriteShortStories extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AddCaptionShortStory(),
+                        builder: (context) => const AddCaptionShortStory(),
                       ));
                 },
-                child: Text('Done')),
+                child: const Text('Done')),
           )
         ],
       ),
